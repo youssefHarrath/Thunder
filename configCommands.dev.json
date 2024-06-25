@@ -1,0 +1,130 @@
+{
+  "commandBanned": {},
+  "envGlobal": {
+    "weatherApiKey": "d7e795ae6a0d44aaa8abb1a0a7ac19e4",
+    "goatbotApikey": ""
+  },
+  "envCommands": {
+    "daily": {
+      "rewardDay1": {
+        "coin": 100,
+        "exp": 10
+      },
+      "rewardFirstDay": {
+        "coin": 100,
+        "exp": 10
+      }
+    },
+    "notification": {
+      "delayPerGroup": 250
+    },
+    "rank": {
+      "deltaNext": 5
+    },
+    "rankup": {
+      "deltaNext": 5
+    },
+    "appstore": {
+      "limitResult": 3
+    },
+    "dhbc": {
+      "reward": 1000
+    },
+    "مستواي": {
+      "deltaNext": 5
+    },
+    "متجر_التطبيقات": {
+      "limitResult": 3
+    },
+    "يومي": {
+      "rewardFirstDay": {
+        "coin": 100,
+        "exp": 10
+      }
+    },
+    "تتبع_المستوى": {
+      "deltaNext": 5
+    },
+    "بوكيمون": {
+      "deltaNext": 5
+    },
+    "إسم_البوت": {
+      "delayPerGroup": 250
+    },
+    "معلومات": {},
+    "إمساك_كلمة": {
+      "reward": 1000
+    },
+    "عمل": {
+      "rewardFirstDay": {
+        "coin": 100,
+        "exp": 10
+      }
+    },
+    "إشعار": {
+      "delayPerGroup": 250
+    },
+    "pokebot": {
+      "deltaNext": 5
+    },
+    "بلاي_ستور": {
+      "limitResult": 3
+    },
+    "مكافحة_الخروج": {
+      "deltaNext": 5
+    },
+    "pokemon": {
+      "reward": 60
+    },
+    "كوسبلاي": {},
+    "تاريخ_و_وقت": {},
+    "ألوان": {
+      "deltaNext": 5
+    },
+    "كهف": {
+      "rewardFirstDay": {
+        "coin": 100,
+        "exp": 10
+      }
+    },
+    "إعلانات": {
+      "deltaNext": 5
+    },
+    "بكاء": {
+      "deltaNext": 5
+    },
+    "شاذ": {
+      "deltaNext": 5
+    },
+    "لعبة_التهجئة": {
+      "reward": 30
+    },
+    "قفل": {
+      "deltaNext": 5
+    },
+    "لقب_البوت": {
+      "delayPerGroup": 250
+    },
+    "أزياء": {},
+    "هدية": {
+      "rewardFirstDay": {
+        "coin": 100,
+        "exp": 10
+      }
+    },
+    "إعادة_إرسال": {
+      "deltaNext": 5
+    },
+    "أب_ستور": {
+      "limitResult": 3
+    },
+    "إشعار_المستوى": {
+      "deltaNext": 5
+    }
+  },
+  "envEvents": {
+    "logsbot": {
+      "allow": true
+    }
+  }
+}
