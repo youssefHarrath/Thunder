@@ -11,7 +11,7 @@ module.exports = {
  }, 
  onStart: async function(){}, 
  onChat: async function({ event, message, getLang }) {
- if (event.body && event.body.toLowerCase() === "الرعد","thunder","رعد") {
+ if (event.body && event.body.toLowerCase() === "الرعد") {
  return message.reply({
  body: "أهلا أنا ميدوريا قم بكتابة .اوامر  من أجل رؤية قائمة الأوامر.",
  attachment: await global.utils.getStreamFromURL("https://i.postimg.cc/3rXfkCCw/FB-IMG-1719261281834.jpg")
