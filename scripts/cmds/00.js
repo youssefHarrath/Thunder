@@ -72,7 +72,7 @@ module.exports = {
         const userIsFriend = userInfo[uid].isFriend ? "✅ نعم" : "❌ لا";
         const isBirthdayToday = userInfo[uid].isBirthday ? "✅ نعم" : "❌ لا";
 
-        const userInformation = `\t\t•——[معلومات]——•\n\n❏اسمك👤: 『${userInfo[uid].name}』\n❏جنسك♋: 『${genderText}』\n❏تصنيفك🧿: 『${rank}』\n❏البنك💰: 『${balance}💲』\n❏عدد الأعضاء 💐 : 『${memberCount}』\n❏عدد رسائلك 📩: 『${messageCounts[uid] || 0}』\n❏هل هو صديق✅ : 『${userIsFriend}』\n❏هل عيد ميلادك اليوم🎉 : 『${isBirthdayToday}』\n❏العنصر الخاص بك🌟: 『${userIndex !== -1 ? animeCharacters[userIndex] : randomCharacter}』`;
+        const userInformation = `\t\t•——[معلومات]——•\n\n❏اسمك👤: 『${userInfo[uid].name}』\n❏جنسك♋: 『${genderText}』\n❏تصنيفك: 『${rank}』\n❏البنك💰: 『${balance}💲』\n❏عدد الأعضاء 💐 : 『${memberCount}』\n❏عدد رسائلك 📩: 『${messageCounts[uid] || 0}』\n❏هل هو صديق✅ : 『${userIsFriend}』\n❏هل عيد ميلادك اليوم🎉 : 『${isBirthdayToday}』\n❏العنصر الخاص بك🌟: 『${userIndex !== -1 ? animeCharacters[userIndex] : randomCharacter}』`;
 
 
         message.reply({
@@ -152,7 +152,7 @@ function getRank(exp, messageCount) {
   if (messageCount >= 300) return '🎖️متفاعل جيد';
   if (messageCount >= 200) return '🌟متفاعل';
   if (messageCount >= 100) return '✨لا بأس';
-  if (messageCount >= 50) return '👾مبتدأ';
-  if (messageCount >= 10) return '🗿صنم';
+  if (messageCount >= 50) return 'مبتدأ';
+  if (messageCount >= 10) return 'صنم';
   return 'ميت⚰️';
 }
