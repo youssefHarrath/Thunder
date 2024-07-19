@@ -4,7 +4,7 @@ module.exports = {
   config: {
     name: "قران",
     version: "1.0",
-    author: "Your Name",
+    author: "Youssef Harrath",
     countDown: 5,
     role: 0,
     shortDescription: {
@@ -24,13 +24,22 @@ module.exports = {
 
   onStart: async function ({ api, args, message, event }) {
     // تحقق من أن الأمر يبدأ بـ ".قران"
-    if (!args[0] || !args[0].startsWith(".قران")) {
+    const command = args[0];
+
+    if (!command || !command.startsWith(".قران")) {
       message.reply("الأمر غير معروف. يرجى استخدام الصيغة الصحيحة: .قران <رقم السورة> <رقم الآية>");
       return;
     }
 
     // إزالة البادئة ".قران" للحصول على الأرقام
-    const commandArgs = args.slice(1);
+    const commandArgs = args.slice(1); // الباقي بعد البادئة
+
+    // تحقق من أن هناك عدد كافٍ من الأرجومنتات
+    if (commandArgs.length < 2) {
+      message.reply("يرجى توفير رقم السورة ورقم الآية.");
+      return;
+    }
+
     const surahNumber = parseInt(commandArgs[0], 10);
     const ayahNumber = parseInt(commandArgs[1], 10);
 
