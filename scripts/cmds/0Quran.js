@@ -4,7 +4,7 @@ module.exports = {
   config: {
     name: "قران",
     version: "1.0",
-    author: "Youssef Harrath",
+    author: "يوسف",
     countDown: 5,
     role: 0,
     shortDescription: {
@@ -17,13 +17,13 @@ module.exports = {
     },
     category: "القرآن الكريم",
     guide: {
-      id: "Penggunaan: .quran <nomor surah> <nomor ayah>",
+      id: "Penggunaan: قران. <nomor surah> <nomor ayah>",
       en: "{p} quran <surah number> <ayah number>"
     }
   },
 
   onStart: async function ({ api, args, message, event }) {
-    // تحقق من أن الأمر يبدأ بـ ".قران"
+    // التحقق من وجود الأمر وبدءه بـ ".قران"
     const command = args[0];
 
     if (!command || !command.startsWith(".قران")) {
@@ -31,31 +31,40 @@ module.exports = {
       return;
     }
 
-    // إزالة البادئة ".قران" للحصول على الأرقام
-    const commandArgs = args.slice(1); // الباقي بعد البادئة
+    // إزالة البادئة للحصول على الأرقام
+    const commandArgs = args.slice(1);
 
-    // تحقق من أن هناك عدد كافٍ من الأرجومنتات
+    // التحقق من وجود عدد كافٍ من الأرجومنتات
     if (commandArgs.length < 2) {
       message.reply("يرجى توفير رقم السورة ورقم الآية.");
       return;
     }
 
+    // تحويل الأرقام إلى قيم عددية
     const surahNumber = parseInt(commandArgs[0], 10);
     const ayahNumber = parseInt(commandArgs[1], 10);
 
+    // التحقق من صحة الأرقام
     if (isNaN(surahNumber) || isNaN(ayahNumber)) {
       message.reply("يرجى إدخال رقم السورة ورقم الآية بشكل صحيح.");
       return;
     }
 
+    // إرسال إشارة الكتابة
     const typingIndicator = api.sendTypingIndicator(event.threadID);
 
     try {
-      const { data } = await axios.get(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/ar.alafasy`);
+      // طلب البيانات من API
+      const response = await axios.get(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/ar.alafasy`);
       typingIndicator();
 
-      const replyMessage = data.data.text;
-      message.reply(replyMessage);
+      // التحقق من وجود البيانات
+      if (response.data && response.data.data && response.data.data.text) {
+        const replyMessage = response.data.data.text;
+        message.reply(replyMessage);
+      } else {
+        message.reply("لم أتمكن من العثور على الآية المطلوبة.");
+      }
     } catch (error) {
       console.error("❌ | حدث خطأ:", error.message);
       typingIndicator();
