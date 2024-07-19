@@ -47,7 +47,7 @@ module.exports = {
     const pathSave = `${__dirname}/tmp/gay.png`;
     fs.writeFileSync(pathSave, Buffer.from(avt));
 
-    let body = "「 هذا الشخص هو ألوان 🙂 」"
+    let body = "「 هذا الشخص هو ألوان '- 」"
     if (!mention[0]) body = " أنت ألوان لأنك نسيت أن تقوم بعمل منشن !"
 
     // Send the image as a reply to the command message
