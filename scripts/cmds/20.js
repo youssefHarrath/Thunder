@@ -47,7 +47,7 @@ onReply: async function({ api, event, Reply, getLang, commandName, prefix }) {
         const index = body.split(/\s+/);
         for (const singleIndex of index) {
             if (isNaN(singleIndex) || singleIndex <= 0 || singleIndex > Reply.pending.length) return api.sendMessage(getLang("invaildNumber", singleIndex), threadID, messageID);
-            api.sendMessage(`╭────༺♡༻────╮\n ✅ |تم توصيل ميدوريا بنجاح 🫂🤍:\n==========💌==========\nأكتب ©أوامر من أجل القائمة\nإستمتع بالذكاء الإصطناعي مع ميدوريا 😉\n==========💌==========\nقم بكتابة "أدخلني" من أجل أن تدخل إلى مجموعة ميدوريا إذا واجهت أي مشاكل 🔖\n╰────༺♡༻────╯`, Reply.pending[singleIndex - 1].threadID);
+            api.sendMessage(`╭────༺♡༻────╮\n ✅ |تم توصيل ميدوريا بنجاح 🫂🤍:\n==========💌==========\nأكتب ©أوامر من أجل القائمة\nإستمتع بالذكاء الإصطناعي مع ميدوريا \n==========💌==========\nقم بكتابة "أدخلني" من أجل أن تدخل إلى مجموعة ميدوريا إذا واجهت أي مشاكل 🔖\n╰────༺♡༻────╯`, Reply.pending[singleIndex - 1].threadID);
             count+=1;
         }
         return api.sendMessage(getLang("approveSuccess", count), threadID, messageID);
