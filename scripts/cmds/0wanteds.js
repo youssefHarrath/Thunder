@@ -31,7 +31,7 @@ module.exports = {
     try {
       const imagePath = await bal(one, two, three);
       await message.reply({
-        body: " ✨ | هؤلاء الأشخاص هم مطلوبين للعدالة 🤓",
+        body: " ✨ | هؤلاء الأشخاص هم مطلوبين للعدالة ",
         attachment: fs.createReadStream(imagePath)
       });
     } catch (error) {
