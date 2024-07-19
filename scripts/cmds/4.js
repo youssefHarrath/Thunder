@@ -6,7 +6,7 @@ module.exports = {
 		author: "HUSSEIN",
 		countDown: 4,
 		role: 0,
-		shortDescription: "مجموعة من الميمز المتنوعة و المضحكة😂",
+		shortDescription: "مجموعة من الميمز المتنوعة و المضحكة",
 		longDescription: "meme random",
 		category: "متعة",
 		guide: "{pn}ميمز"
@@ -50,7 +50,7 @@ module.exports = {
 ]
 let img = link[Math.floor(Math.random()*link.length)]
 message.send({
-body: 'هنا الميمات الخاصة بك🎭',attachment: await global.utils.getStreamFromURL(img)
+body: 'هنا الميمات الخاصة بك',attachment: await global.utils.getStreamFromURL(img)
 })
 }
                }
