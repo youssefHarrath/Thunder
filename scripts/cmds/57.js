@@ -26,6 +26,6 @@ module.exports = {
 
     const finalAge = isBeforeBirthday ? age - 1 : age;
 
-    api.sendMessage(` ✅ | عمرك هو ${finalAge}\nهل أنا على صواب 🙂`, event.threadID);
+    api.sendMessage(` ✅ | عمرك هو ${finalAge}\nهل أنا على صواب '-`, event.threadID);
   },
 };
