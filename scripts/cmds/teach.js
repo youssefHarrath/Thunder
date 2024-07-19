@@ -37,17 +37,16 @@ module.exports = {
 
     try {
       const c = response;
-      const d = userID;
-      const { data } = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(c)}&uid=${d}&apikey=kshitiz`);
+      const { data } = await axios.get(`https://markdevs69-1efde24ed4ea.herokuapp.com/api/v3/gpt4?ask=${encodeURIComponent(c)}`);
 
       typingIndicator();
 
-      const replyMessage = data.reply;
+      const replyMessage = data.answer;
       message.reply(replyMessage);
     } catch (error) {
       console.error("❌ | حدث خطأ:", error.message);
       typingIndicator();
-      message.reply(`${error}`);
+      message.reply(`❌ | حدث خطأ: ${error.message}`);
     }
   }
 };
