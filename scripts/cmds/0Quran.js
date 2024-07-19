@@ -30,7 +30,7 @@ module.exports = {
     const command = args[0];
     console.log("الأمر الأول:", command);
 
-    if (!command || !command.startsWith(".قران")) {
+    if (!command || !command.startsWith("قران")) {
       message.reply("الأمر غير معروف. يرجى استخدام الصيغة الصحيحة: .قران <رقم السورة> <رقم الآية>");
       return;
     }
