@@ -13,7 +13,7 @@ def get_quran_verse(surah_number, ayah_number):
         return "الآية غير موجودة."
 
 def handle_command(command):
-    if command.startswith(".قران"):
+    if command.startswith("قران."):
         parts = command.split()
         if len(parts) == 3:
             try:
@@ -29,6 +29,6 @@ def handle_command(command):
 
 # مثال على الاستخدام:
 if __name__ == "__main__":
-    command = ".قران 1 1"
+    command = "قران 1 1."
     response = handle_command(command)
     print(response)
