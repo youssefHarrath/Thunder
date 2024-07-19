@@ -17,14 +17,18 @@ module.exports = {
     },
     category: "القرآن الكريم",
     guide: {
-      id: "Penggunaan: قران. <nomor surah> <nomor ayah>",
+      id: "Penggunaan: .قران <nomor surah> <nomor ayah>",
       en: "{p} quran <surah number> <ayah number>"
     }
   },
 
   onStart: async function ({ api, args, message, event }) {
-    // التحقق من وجود الأمر وبدءه بـ ".قران"
+    // إضافة رسالة لتصحيح المدخلات
+    console.log("المدخلات:", args);
+
+    // التحقق من أن الأمر يبدأ بـ ".قران"
     const command = args[0];
+    console.log("الأمر الأول:", command);
 
     if (!command || !command.startsWith(".قران")) {
       message.reply("الأمر غير معروف. يرجى استخدام الصيغة الصحيحة: .قران <رقم السورة> <رقم الآية>");
@@ -33,8 +37,8 @@ module.exports = {
 
     // إزالة البادئة للحصول على الأرقام
     const commandArgs = args.slice(1);
+    console.log("الأرجومنتات بعد البادئة:", commandArgs);
 
-    // التحقق من وجود عدد كافٍ من الأرجومنتات
     if (commandArgs.length < 2) {
       message.reply("يرجى توفير رقم السورة ورقم الآية.");
       return;
@@ -44,7 +48,9 @@ module.exports = {
     const surahNumber = parseInt(commandArgs[0], 10);
     const ayahNumber = parseInt(commandArgs[1], 10);
 
-    // التحقق من صحة الأرقام
+    console.log("رقم السورة:", surahNumber);
+    console.log("رقم الآية:", ayahNumber);
+
     if (isNaN(surahNumber) || isNaN(ayahNumber)) {
       message.reply("يرجى إدخال رقم السورة ورقم الآية بشكل صحيح.");
       return;
