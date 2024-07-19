@@ -38,7 +38,7 @@ module.exports = {
 		const url = "https://drive.google.com/uc?export=download&id=1K8F9J7Y44Ja0OKCI9uknnnqYJCSPQZIw";
 
 
-		const loadingMessage = await api.sendMessage(" ⏱️ | جاري البحث عن شاذ في المجموعة 🤡......", groupId);
+		const loadingMessage = await api.sendMessage(" ⏱️ | جاري البحث عن شاذ في المجموعة ......", groupId);
 
 
 		kaguya.reply({
