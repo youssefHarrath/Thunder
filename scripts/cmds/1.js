@@ -22,7 +22,7 @@ api.setMessageReaction("🚫", event.messageID, (err) => {}, true);
       const permission = ["100076269693499"];
       if (!permission.includes(event.senderID)) {
         return api.sendMessage(
-          "(\/)\ •_•)\/ >🧠\لقد أوقعت هذا يا غبي",
+          "(\/)\ _•)\/ >🧠\لقد أوقعت هذا يا غبي",
           event.threadID,
           event.messageID
         );
