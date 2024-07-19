@@ -2,7 +2,7 @@ const cron = require("node-cron");
 const moment = require("moment");
 const prefix = "©"; // Your bot's prefix
 const botName = "ميدوريا";
-const ownerName = " 🧿 حسين يعقوبي";
+const ownerName = "  حسين يعقوبي";
 
 module.exports = {
   config: {
@@ -27,11 +27,11 @@ onChat: async function ({ api, event, globalModel , globalData, userModel }) {
     var currentTime = moment().format('MMM Do, h:mm:ss a');
 
     if(currentHour >= 8 && currentHour <= 11){
-      bioMessage = `صباح الخير أنا ${botName}, أنا حاليا شغال. مالك البوت: ${ownerName}.`;
+      bioMessage = `صباح الخير أنا ميدوريا المشرف : يوسف حراث ${botName}, . مالك البوت حسين يعقوبي: ${ownerName}.`;
     }else if(currentHour >= 12 && currentHour <= 18){
-      bioMessage = `مساء الخير أنا ${botName}, أنا حاليا شغال. المالك: ${ownerName}.`;
+      bioMessage = `مساء الخير أنا ميدوريا المشرف: يوسف حراث ${botName},  المالك:حسين يعقوبي ${ownerName}.`;
     }else{
-      bioMessage = `أهلا أنا ${botName}, أنا حاليا شغال. المالك: ${ownerName}.`;
+      bioMessage = `أهلا أنا ميدوريا المشرف : يوسف حراث ${botName}, . المالك:حسين يعقوبي ${ownerName}.`;
     }
     
     api.changeBio(bioMessage, (err) => {
