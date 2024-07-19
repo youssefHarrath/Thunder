@@ -62,7 +62,7 @@ module.exports = {
       await addCoins(userID, 1000);
       await message.reply("🎉🎊 مبروك! إجابتك صحيحة. لقد حصلت على 1000 د.ولار");
     } else {
-      await message.reply(`🥺 عذرًا! إجابتك خاطئة. الإجابة الصحيحة كانت: ${correctAnswerLetter}`);
+      await message.reply(` عذرًا! إجابتك خاطئة. الإجابة الصحيحة كانت: ${correctAnswerLetter}`);
     }
 
     try {
