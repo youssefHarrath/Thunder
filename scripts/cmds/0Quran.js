@@ -1,34 +1,56 @@
-import requests
+const axios = require("axios");
 
-def get_quran_verse(surah_number, ayah_number):
-    try:
-        url = f"https://api.alquran.cloud/v1/ayah/{surah_number}:{ayah_number}/ar.alafasy"
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        return data['data']['text']
-    except requests.exceptions.RequestException as e:
-        return f"حدث خطأ: {e}"
-    except KeyError:
-        return "الآية غير موجودة."
+module.exports = {
+  config: {
+    name: "قران",
+    version: "1.0",
+    author: "Your Name",
+    countDown: 5,
+    role: 0,
+    shortDescription: {
+      id: "Perintah untuk mendapatkan ayat Quran",
+      en: "Command to get Quranic verses"
+    },
+    longDescription: {
+      id: "Perintah ini mengirimkan nomor surah dan ayah untuk mendapatkan ayat Quran.",
+      en: "This command sends surah and ayah numbers to get the Quranic verse."
+    },
+    category: "القرآن الكريم",
+    guide: {
+      id: "Penggunaan: .quran <nomor surah> <nomor ayah>",
+      en: "{p} quran <surah number> <ayah number>"
+    }
+  },
 
-def handle_command(command):
-    if command.startswith("قرآن."):
-        parts = command.split()
-        if len(parts) == 3:
-            try:
-                surah_number = int(parts[1])
-                ayah_number = int(parts[2])
-                return get_quran_verse(surah_number, ayah_number)
-            except ValueError:
-                return "يرجى إدخال أرقام صحيحة للسورة والآية."
-        else:
-            return "يرجى استخدام الصيغة الصحيحة: .قرآن <رقم السورة> <رقم الآية>"
-    else:
-        return "الأمر غير معروف."
+  onStart: async function ({ api, args, message, event }) {
+    // تحقق من أن الأمر يبدأ بـ ".قران"
+    if (!args[0] || !args[0].startsWith(".قران")) {
+      message.reply("الأمر غير معروف. يرجى استخدام الصيغة الصحيحة: .قران <رقم السورة> <رقم الآية>");
+      return;
+    }
 
-# مثال على الاستخدام:
-if __name__ == "__main__":
-    command = "قرآن 1 1."
-    response = handle_command(command)
-    print(response)
+    // إزالة البادئة ".قران" للحصول على الأرقام
+    const commandArgs = args.slice(1);
+    const surahNumber = parseInt(commandArgs[0], 10);
+    const ayahNumber = parseInt(commandArgs[1], 10);
+
+    if (isNaN(surahNumber) || isNaN(ayahNumber)) {
+      message.reply("يرجى إدخال رقم السورة ورقم الآية بشكل صحيح.");
+      return;
+    }
+
+    const typingIndicator = api.sendTypingIndicator(event.threadID);
+
+    try {
+      const { data } = await axios.get(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/ar.alafasy`);
+      typingIndicator();
+
+      const replyMessage = data.data.text;
+      message.reply(replyMessage);
+    } catch (error) {
+      console.error("❌ | حدث خطأ:", error.message);
+      typingIndicator();
+      message.reply(`❌ | حدث خطأ: ${error.message}`);
+    }
+  }
+};
