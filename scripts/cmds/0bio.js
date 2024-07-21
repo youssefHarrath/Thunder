@@ -44,9 +44,9 @@ onChat: async function ({ api, event, globalModel , globalData, userModel }) {
 },
 
     onStart: async function ({ api, event, globalData, args, globalModel, userModel, usersData, commandName, role }) {
-    const zed = (`هاي انا ${botName}\nأنا حاليا شغال » 🟢\nالمالك »  ${ownerName}.`);
+    const zed = (`هاي انا ${botName}\nأنا حاليا شغال » 🟢\nالمالك المشرف : يوسف »  ${ownerName}.`);
          
-      api.changeBio(`أهلا أنا  ${botName}\nأنا حاليا شغال  » 🟢\nالمالك »  ${ownerName}.`, (e) => {
+      api.changeBio(`أهلا أنا  ${botName}\nأنا حاليا شغال  » 🟢\nالمالك  المشرف : يوسف »  ${ownerName}.`, (e) => {
       if(e) api.sendMessage(" ❌ |حدث خطأ" + e, event.threadID); return api.sendMessage(`✅ | تم تغيير حالة البوت بنجاح إلى » \n${zed}`, event.threadID, event.messgaeID)
     }
     )
