@@ -4,7 +4,7 @@ module.exports = {
     config: {
         name: "تفكيك",
         version: "1.0",
-        author: "حسين يعقوبي",
+        author: "يوسف",
         role: 0,
         countdown: 10,
         reward: Math.floor(Math.random() * (100 - 50 + 1) + 50),
@@ -29,16 +29,15 @@ module.exports = {
             "كنبة", "ثلاجة", "تلفاز", "راديو", "ساعة", "مرآة", "غرفة", "بيت", "سطح", "جدار"
         ];
         const randomWord = words[Math.floor(Math.random() * words.length)];
-        const scrambledWord = randomWord.split('').sort(() => 0.5 - Math.random()).join(' ');
 
         message.reply({
-            body: `✿━━━━━━━━━━━━━━━━━✿\n ⚜️ | فكك الكلمة التالية: ${scrambledWord}\n✿━━━━━━━━━━━━━━━━━✿`
+            body: `✿━━━━━━━━━━━━━━━━━✿\n ⚜️ | فكك الكلمة التالية: ${randomWord}\n✿━━━━━━━━━━━━━━━━━✿`
         }, async (err, info) => {
             global.GoatBot.onReply.set(info.messageID, {
                 commandName,
                 messageID: info.messageID,
                 author: event.senderID,
-                answer: randomWord
+                answer: randomWord.split('').join(' ')
             });
         });
     },
