@@ -39,29 +39,29 @@ module.exports = {
 
       let uptimeGreeting = "Greetings!"; 
       if (days > 5) {
-        uptimeGreeting = " 🤩 | مثير للأعجاب البوت يعمل ننذ 5 أيام";
+        uptimeGreeting = "  | مثير للأعجاب البوت يعمل ننذ 5 أيام";
       } else if (days > 2) {
-        uptimeGreeting = " هذا رائع البوت يبدو في حالة جيدة 😉";
+        uptimeGreeting = " هذا رائع البوت يبدو في حالة جيدة ";
       } else if (days > 1 || (days === 1 && hours >= 1)) {
-        uptimeGreeting = "مسرور لرؤيتك مجددا البوت قد كان يعمل منذ يوم 😁";
+        uptimeGreeting = "مسرور لرؤيتك مجددا البوت قد كان يعمل منذ يوم ";
       } else if (hours >= 12) {
-        uptimeGreeting = "البوت كان يعمل لمدة 12 ساعة هذا مثير للإعجاب 😗";
+        uptimeGreeting = "البوت كان يعمل لمدة 12 ساعة هذا مثير للإعجاب ";
       } else if (hours >= 6) {
-        uptimeGreeting = "نصف يوم يبدو أن البوت في تقدم جيد 😘";
+        uptimeGreeting = "نصف يوم يبدو أن البوت في تقدم جيد ";
       } else if (hours >= 3) {
-        uptimeGreeting = "ثلاث ساعات هذا شيء جيد ☺️";
+        uptimeGreeting = "ثلاث ساعات هذا شيء جيد ";
       } else if (hours >= 1) {
-        uptimeGreeting = "مسرور لرؤيتك مجددا لقد كان يعمل منذ ساعة 😏";
+        uptimeGreeting = "مسرور لرؤيتك مجددا لقد كان يعمل منذ ساعة ";
       } else if (minutes > 30) {
-        uptimeGreeting = "نصف ساعة قد مرت ولازال يعمل 😗";
+        uptimeGreeting = "نصف ساعة قد مرت ولازال يعمل ";
       } else if (minutes > 15) {
-        uptimeGreeting = "ربع ساعة هذا شيء مبهر 🙃";
+        uptimeGreeting = "ربع ساعة هذا شيء مبهر ";
       } else if (minutes > 5) {
-        uptimeGreeting = "البوت لقد بدأ العمل للتو منذ 5 دقائق 😌";
+        uptimeGreeting = "البوت لقد بدأ العمل للتو منذ 5 دقائق ";
       } else if (minutes > 1) {
-        uptimeGreeting = "دقيقة قد مرت وقد بدأ فقط لعو العمل 😅";
+        uptimeGreeting = "دقيقة قد مرت وقد بدأ فقط لعو العمل ";
       } else {
-        uptimeGreeting = " أهلا لقد بدأ البوت بالعمل للتو 🙂";
+        uptimeGreeting = " أهلا لقد بدأ البوت بالعمل للتو ";
       }
 
       const additionalMessages = [
@@ -77,7 +77,7 @@ module.exports = {
 
       const randomAdditionalMessage = additionalMessages[Math.floor(Math.random() * additionalMessages.length)];
 
-      const replyMessage = `🤖 مدة التشغيل : ${uptimeString}\n🚦 الحالة : ${statusMessage}\n🕒 الوقت: ${ping} ميلي ثانية\n💾 الذاكرة المستخدمة : ${memoryUsage.toFixed(2)} ميغابايت\n\n${uptimeGreeting}\n\n🌟 ${randomAdditionalMessage}`;
+      const replyMessage = ` مدة التشغيل : ${uptimeString}\n🚦 الحالة : ${statusMessage}\n🕒 الوقت: ${ping} ميلي ثانية\n💾 الذاكرة المستخدمة : ${memoryUsage.toFixed(2)} ميغابايت\n\n${uptimeGreeting}\n\n🌟 ${randomAdditionalMessage}`;
 
       message.reply(replyMessage);
     } catch (error) {
