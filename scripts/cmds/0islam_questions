@@ -1,0 +1,226 @@
+const fetch = require('node-fetch');
+
+// قائمة الأسئلة الدينية (30 سؤالاً)
+const religiousQuestions = [
+  {
+    question: "ما هي السورة التي تعدل ثلث القرآن؟",
+    options: { 1: "سورة البقرة", 2: "سورة الإخلاص", 3: "سورة الفاتحة", 4: "سورة الكهف" },
+    correctOption: 2
+  },
+  {
+    question: "ما هي أول صلاة فرضت على الرسول ﷺ؟",
+    options: { 1: "صلاة الفجر", 2: "صلاة الظهر", 3: "صلاة العصر", 4: "صلاة المغرب" },
+    correctOption: 1
+  },
+  {
+    question: "من هو أول خليفة للمسلمين؟",
+    options: { 1: "عمر بن الخطاب", 2: "عثمان بن عفان", 3: "علي بن أبي طالب", 4: "أبو بكر الصديق" },
+    correctOption: 4
+  },
+  {
+    question: "كم عدد سور القرآن الكريم؟",
+    options: { 1: "114", 2: "110", 3: "100", 4: "120" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو ترتيب شهر رمضان في الشهور الهجرية؟",
+    options: { 1: "الأول", 2: "التاسع", 3: "السابع", 4: "الثالث" },
+    correctOption: 2
+  },
+  {
+    question: "ما هي الكلمة الأكثر تكراراً في القرآن؟",
+    options: { 1: "الله", 2: "محمد", 3: "الرحمن", 4: "الرحيم" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو المسجد الذي أسري بالرسول إليه؟",
+    options: { 1: "المسجد الحرام", 2: "المسجد النبوي", 3: "المسجد الأقصى", 4: "مسجد قباء" },
+    correctOption: 3
+  },
+  {
+    question: "من هو أول مؤذن في الإسلام؟",
+    options: { 1: "بلال بن رباح", 2: "أبو بكر الصديق", 3: "عمر بن الخطاب", 4: "علي بن أبي طالب" },
+    correctOption: 1
+  },
+  {
+    question: "كم عدد الأنبياء الذين ذكروا في القرآن؟",
+    options: { 1: "20", 2: "25", 3: "30", 4: "35" },
+    correctOption: 2
+  },
+  {
+    question: "ما هو الدعاء الذي يقال عند لبس الثوب؟",
+    options: { 1: "الحمد لله الذي كساني هذا الثوب", 2: "اللهم بارك لنا فيه", 3: "سبحان الذي سخر لنا هذا", 4: "اللهم اجعلني من الشاكرين" },
+    correctOption: 1
+  },
+  {
+    question: "من هو النبي الذي ابتلعه الحوت؟",
+    options: { 1: "موسى", 2: "عيسى", 3: "يونس", 4: "إبراهيم" },
+    correctOption: 3
+  },
+  {
+    question: "ما هي أطول سورة في القرآن؟",
+    options: { 1: "سورة البقرة", 2: "سورة آل عمران", 3: "سورة النساء", 4: "سورة الكهف" },
+    correctOption: 1
+  },
+  {
+    question: "ما اسم والدة النبي محمد ﷺ؟",
+    options: { 1: "آمنة", 2: "فاطمة", 3: "خديجة", 4: "حليمة" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو اسم النبي الذي بُعث إلى بني إسرائيل؟",
+    options: { 1: "موسى", 2: "عيسى", 3: "إبراهيم", 4: "شعيب" },
+    correctOption: 1
+  },
+  {
+    question: "ما هي السورة التي تبدأ بآية {يس}؟",
+    options: { 1: "سورة يس", 2: "سورة ص", 3: "سورة النمل", 4: "سورة الإخلاص" },
+    correctOption: 1
+  },
+  {
+    question: "كم عدد ركعات صلاة الفجر؟",
+    options: { 1: "4", 2: "2", 3: "3", 4: "5" },
+    correctOption: 2
+  },
+  {
+    question: "ما هو اسم الجبل الذي نزلت عليه الشريعة الإسلامية؟",
+    options: { 1: "جبل أحد", 2: "جبل النور", 3: "جبل الرحمة", 4: "جبل الصفا" },
+    correctOption: 2
+  },
+  {
+    question: "ما هو اسم الصحابي الذي لقب بـ 'أمين الأمة'؟",
+    options: { 1: "أبو بكر الصديق", 2: "عمر بن الخطاب", 3: "عثمان بن عفان", 4: "عبد الله بن عمر" },
+    correctOption: 3
+  },
+  {
+    question: "ما هي السورة التي تحتوي على بسم الله الرحمن الرحيم مرتين؟",
+    options: { 1: "سورة النمل", 2: "سورة الفاتحة", 3: "سورة الإخلاص", 4: "سورة الكهف" },
+    correctOption: 1
+  },
+  {
+    question: "ما اسم زوجة النبي محمد ﷺ التي أنجبت له أكبر أبنائه؟",
+    options: { 1: "خديجة", 2: "عائشة", 3: "سودة", 4: "حفصة" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو اسم الكتاب الذي أنزل على النبي عيسى عليه السلام؟",
+    options: { 1: "الإنجيل", 2: "التوراة", 3: "الزبور", 4: "القرآن" },
+    correctOption: 1
+  },
+  {
+    question: "من هو النبي الذي بُعث إلى قوم عاد؟",
+    options: { 1: "موسى", 2: "شعيب", 3: "هود", 4: "إبراهيم" },
+    correctOption: 3
+  },
+  {
+    question: "ما هو عدد الأركان الأساسية في الإسلام؟",
+    options: { 1: "5", 2: "6", 3: "4", 4: "7" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو اسم الصحابي الذي جمع القرآن في مصحف واحد؟",
+    options: { 1: "أبو بكر الصديق", 2: "عمر بن الخطاب", 3: "عثمان بن عفان", 4: "علي بن أبي طالب" },
+    correctOption: 3
+  },
+  {
+    question: "ما هي السورة التي يُطلق عليها 'قلب القرآن'؟",
+    options: { 1: "سورة البقرة", 2: "سورة الفاتحة", 3: "سورة الإخلاص", 4: "سورة الكهف" },
+    correctOption: 1
+  },
+  {
+    question: "ما هو اسم نهر الجنة؟",
+    options: { 1: "النهر الكريم", 2: "النهر المبارك", 3: "النهر الذي ذكر في القرآن", 4: "النهر الذي أنزلت عليه السماء" },
+    correctOption: 3
+  },
+  {
+    question: "من هو النبي الذي دُفن في مكة؟",
+    options: { 1: "إبراهيم", 2: "محمد", 3: "موسى", 4: "عيسى" },
+    correctOption: 2
+  },
+  {
+    question: "ما هي الصلاة التي تسبق صلاة الفجر؟",
+    options: { 1: "صلاة الظهر", 2: "صلاة العصر", 3: "صلاة المغرب", 4: "صلاة السنة الفجر" },
+    correctOption: 4
+  },
+  {
+    question: "ما هي السورة التي تحتوي على آية الكرسي؟",
+    options: { 1: "سورة البقرة", 2: "سورة الإخلاص", 3: "سورة الكهف", 4: "سورة النمل" },
+    correctOption: 1
+  },
+  {
+    question: "من هو الصحابي الذي كان يعرف بـ 'البراء بن عازب'؟",
+    options: { 1: "البراء بن ع
+// قائمة الأسئلة الدينية (70 سؤالاً)
+ religiousQuestions = [
+  {
+  
+
+// دالة لإضافة المال إلى حساب المستخدم البنكي في البوت
+function addMoney(userID, amount) {
+  // هنا ضع منطق إضافة المال إلى حساب المستخدم البنكي
+  // تأكد من تحديث الحساب في قاعدة البيانات الخاصة بك
+}
+
+async function askReligiousQuestion({ api, event }) {
+  const randomIndex = Math.floor(Math.random() * religiousQuestions.length);
+  const question = religiousQuestions[randomIndex];
+
+  let message = `${question.question}\n`;
+  for (const [key, value] of Object.entries(question.options)) {
+    message += `${key}: ${value}\n`;
+  }
+
+  api.sendMessage(message, event.threadID, (err, info) => {
+    if (err) return console.error(err);
+
+    const listenForAnswer = (msg) => {
+      if (msg.threadID === event.threadID && msg.senderID === event.senderID) {
+        const userAnswer = parseInt(msg.body.trim(), 10);
+        if (userAnswer === question.correctOption) {
+          api.sendMessage("جوابك صحيح! لقد حصلت على 50 دولار.", msg.threadID);
+          addMoney(msg.senderID, 50); // أضف 50 دولارًا إلى حساب المستخدم البنكي
+        } else {
+          api.sendMessage("إجابتك غير صحيحة. حاول مرة أخرى!", msg.threadID);
+        }
+        // توقف الاستماع بعد تلقي الإجابة
+        api.removeListener('message', listenForAnswer);
+      }
+    };
+
+    api.listenMqtt(listenForAnswer);
+  });
+}
+
+module.exports = {
+  config: {
+    name: "سؤال_ديني",
+    version: "1.0",
+    author: "يوسف",
+    countDown: 5,
+    role: 0,
+    shortDescription: {
+      vi: "đây là mô tả ngắn của lệnh",
+      en: "يطرح سؤال ديني ويعطي جائزة عند الإجابة الصحيحة"
+    },
+    longDescription: {
+      vi: "đây là mô tả dài của lệnh",
+      en: "يطرح سؤال ديني من مستويات مختلفة ويعطي جائزة مالية عند الإجابة الصحيحة"
+    },
+    category: "إسلام",
+    guide: {
+      vi: "đây là hướng dẫn sử dụng của lệnh",
+      en: "{pn} لطرح سؤال ديني"
+    }
+  },
+  langs: {
+    vi: {
+      hello: "xin chào",
+      helloWithName: "xin chào, id facebook của bạn là %1"
+    },
+    en: {
+      hello: "hello world",
+      helloWithName: "hello, your facebook id is %1"
+    }
+  },
+  onStart: askReligiousQuestion,
+};
