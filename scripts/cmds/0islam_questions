@@ -143,10 +143,7 @@ const religiousQuestions = [
     correctOption: 4
   },
   {
-    question: "ما هي السورة التي تحتوي على آية الكرسي؟",
-    options: { 1: "سورة البقرة", 2: "سورة الإخلاص", 3: "سورة الكهف", 4: "سورة النمل" },
-    correctOption: 1
-  },
+    question:
 
 // دالة لإضافة المال إلى حساب المستخدم البنكي في البوت
 function addMoney(userID, amount) {
