@@ -147,13 +147,6 @@ const religiousQuestions = [
     options: { 1: "سورة البقرة", 2: "سورة الإخلاص", 3: "سورة الكهف", 4: "سورة النمل" },
     correctOption: 1
   },
-  {
-    question: "من هو الصحابي الذي كان يعرف بـ 'البراء بن عازب'؟",
-    options: { 1: "البراء بن ع
-// قائمة الأسئلة الدينية (70 سؤالاً)
- religiousQuestions = [
-  {
-  
 
 // دالة لإضافة المال إلى حساب المستخدم البنكي في البوت
 function addMoney(userID, amount) {
