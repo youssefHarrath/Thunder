@@ -49,7 +49,9 @@ module.exports = {
 
         if (userAnswer === answer) {
             global.GoatBot.onReply.delete(messageID);
-            message.unsend(event.messageReply.messageID);
+            if (event.messageReply && event.messageReply.messageID) {
+                message.unsend(event.messageReply.messageID);
+            }
             const reward = Math.floor(Math.random() * (100 - 50 + 1) + 50);
             await usersData.addMoney(event.senderID, reward);
             const userName = await api.getUserInfo(event.senderID);
