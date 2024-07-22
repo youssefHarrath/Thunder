@@ -31,7 +31,7 @@ module.exports = {
         const randomWord = words[Math.floor(Math.random() * words.length)];
 
         message.reply({
-            body: `✿━━━━━━━━━━━━━━━━━✿\n ⚜️ | فكك الكلمة التالية: ${randomWord}\n✿━━━━━━━━━━━━━━━━━✿`
+            body: `✿━━━━━━━━━━━━━━━✿\n ⚜️ | فكك الكلمة التالية: ${randomWord}\n✿━━━━━━━━━━━━━━━✿`
         }, async (err, info) => {
             global.GoatBot.onReply.set(info.messageID, {
                 commandName,
