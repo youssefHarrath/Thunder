@@ -27,14 +27,14 @@ module.exports = {
           break;
         case "ناني":
           message.reply({
-            body: "[ ناني 😗 ]",
+            body: "[ ناني  ]",
             attachment: fs.createReadStream("scripts/cmds/noprefix/nani.mp3"),
           });
-          await api.setMessageReaction("😨", event.messageID, event.threadID, api);
+          await api.setMessageReaction("'-", event.messageID, event.threadID, api);
           break;
         case "أهلا":
           message.reply({
-            body: "✧───────────────✧\n\t\t\tأهلا أختي او أخي منورين المجموعة بحضوركم 😁💖\n✧───────────────✧",
+            body: "✧───────────────✧\n\t\t\tأهلا أختي او أخي منورين المجموعة بحضوركم 💖\n✧───────────────✧",
             attachment: fs.createReadStream("scripts/cmds/noprefix/welcom.gif"),
           });
           await api.setMessageReaction("🌸", event.messageID, event.threadID, api);
@@ -48,10 +48,10 @@ module.exports = {
           break;
         case "المالك":
           message.reply({
-            body: "📜 معلومات حول المالك:\nالإسم :حسبن يعقوبي  \nالجنس :ذكر \nالعمر : مجهول \nرابط فيسبوك :https://www.facebook.com/profile.php?id=100076269693499 ",
+            body: "📜  معلومات حول المالك و المشرف:\nالإسم :حسين يعقوبي. يوسف   \nالجنس :ذكر \nالعمر : مجهول \nرابط فيسبوك :https://www.facebook.com/profile.php?id=100076269693499  https://www.facebook.com/61556432954740 ",
             attachment: fs.createReadStream("scripts/cmds/noprefix/owner.gif"),
           });
-          await api.setMessageReaction("😙", event.messageID, event.threadID, api);
+          await api.setMessageReaction("", event.messageID, event.threadID, api);
           break;
         default:
           return;
