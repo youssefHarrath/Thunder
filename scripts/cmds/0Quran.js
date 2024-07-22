@@ -1,63 +1,58 @@
-const axios = require("axios");
+const fetch = require('node-fetch');
+
+async function getQuranText({ api, event, args }) {
+  var s1 = args[0];
+  var s2 = args[1];
+
+  if (!s1 || !s2) {
+    return api.sendMessage("تأكد أنك وضعت الأمر بهذا الشكل:\n\n قران رقم السورة مسافة ثم رقم الآية \n مثال:\n قران 1 2", event.threadID, event.messageID);
+  }
+
+  var url = `https://api.quran.gading.dev/surah/${s1}/${s2}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    var verseText = data.data.text.arab;
+
+    api.sendMessage({ body: verseText }, event.threadID, event.messageID);
+  } catch (error) {
+    console.error('Error:', error);
+    api.sendMessage("حدث خطأ في جلب الآية. تأكد من صحة رقم السورة والآية.", event.threadID, event.messageID);
+  }
+}
 
 module.exports = {
   config: {
     name: "قران",
     version: "1.0",
-    author: "يوسف",
+    author: "يوسف", // made by Gry converted by HUSSEIN
     countDown: 5,
     role: 0,
     shortDescription: {
-      id: "Perintah untuk mendapatkan ayat Quran",
-      en: "Command to get Quranic verses"
+      vi: "đây là mô tả ngắn của lệnh",
+      en: "يجلب آية مكتوبة من القرآن"
     },
     longDescription: {
-      id: "Perintah ini mengirimkan nomor surah dan ayah untuk mendapatkan ayat Quran.",
-      en: "This command sends surah and ayah numbers to get the Quranic verse."
+      vi: "đây là mô tả dài của lệnh",
+      en: "يجلب آية مكتوبة من القرآن"
     },
-    category: "القرآن الكريم",
+    category: "إسلام",
     guide: {
-      id: "Penggunaan: .قران <nomor surah> <nomor ayah>",
-      en: "{p} quran <surah number> <ayah number>"
+      vi: "đây là hướng dẫn sử dụng của lệnh",
+      en: "{pn}"
     }
   },
-
-  onStart: async function ({ api, args, message, event }) {
-    // التحقق من أن الأمر يبدأ بـ ".قران"
-    if (!args[0] || !args[0].startsWith("قران")) {
-      return message.reply("الأمر غير معروف. يرجى استخدام الصيغة الصحيحة: .قران <رقم السورة> <رقم الآية>");
+  langs: {
+    vi: {
+      hello: "xin chào",
+      helloWithName: "xin chào, id facebook của bạn là %1"
+    },
+    en: {
+      hello: "hello world",
+      helloWithName: "hello, your facebook id is %1"
     }
-
-    // إزالة البادئة للحصول على الأرقام
-    const commandArgs = args.slice(1);
-
-    if (commandArgs.length < 2) {
-      return message.reply("يرجى توفير رقم السورة ورقم الآية.");
-    }
-
-    // تحويل الأرقام إلى قيم عددية
-    const surahNumber = parseInt(commandArgs[0], 10);
-    const ayahNumber = parseInt(commandArgs[1], 10);
-
-    if (isNaN(surahNumber) || isNaN(ayahNumber)) {
-      return message.reply("يرجى إدخال رقم السورة ورقم الآية بشكل صحيح.");
-    }
-
-    // إرسال إشارة الكتابة
-    await api.sendTypingIndicator(event.threadID);
-
-    try {
-      // طلب البيانات من API
-      const response = await axios.get(`https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/ar.alafasy`);
-      
-      if (response.data && response.data.data && response.data.data.text) {
-        return message.reply(response.data.data.text);
-      } else {
-        return message.reply("لم أتمكن من العثور على الآية المطلوبة.");
-      }
-    } catch (error) {
-      console.error("❌ | حدث خطأ:", error.message);
-      return message.reply(`❌ | حدث خطأ: ${error.message}`);
-    }
-  }
+  },
+  onStart: getQuranText,
 };
