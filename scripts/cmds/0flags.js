@@ -29,9 +29,13 @@ module.exports = {
 
         // Send the message with the attached image
         message.reply({
-            body: `✿━━━━━━━━━━━━━━━━━✿\n ⚜️ | ما هو اسم العلم في الصورة ؟\n✿━━━━━━━━━━━━━━━━━✿`,
+            body: `✿━━━━━━━━━━━━━━━✿\n ⚜️ | ما هو اسم العلم في الصورة ؟\n✿━━━━━━━━━━━━━━━✿`,
             attachment: imageStream
         }, async (err, info) => {
+            if (err) {
+                console.error('Failed to send message:', err);
+                return;
+            }
             global.GoatBot.onReply.set(info.messageID, {
                 commandName,
                 messageID: info.messageID,
@@ -48,7 +52,9 @@ module.exports = {
 
         if (userAnswer === answer) {
             global.GoatBot.onReply.delete(messageID);
-            message.unsend(event.messageReply.messageID);
+            if (event.messageReply && event.messageReply.messageID) {
+                message.unsend(event.messageReply.messageID);
+            }
             const reward = Math.floor(Math.random() * (100 - 50 + 1) + 50);
             await usersData.addMoney(event.senderID, reward);
             const userName = await api.getUserInfo(event.senderID);
