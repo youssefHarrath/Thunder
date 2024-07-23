@@ -22,8 +22,8 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, commandName }) {
-    const questionsPath = path.join(__dirname, '../hazoura.json');
-    const questions = JSON.parse(fs.readFileSync(questionsPath, 'utf8'));
+    const questionsPath = path.resolve(__dirname, '..', 'hazoura.json');
+    const questions = JSON.parse(fs.readFileSync(questionsPath));
     const randomQuestionObj = questions[Math.floor(Math.random() * questions.length)];
 
     let optionsText = '';
@@ -42,7 +42,7 @@ module.exports = {
     });
   },
 
-  onReply: async function ({ message, Reply, event, usersData, api, commandName }) {
+  onReply: async ({ message, Reply, event, usersData, api, commandName }) => {
     const { author, messageID, correctOption } = Reply;
     const userAnswer = parseInt(event.body.trim(), 10);
 
