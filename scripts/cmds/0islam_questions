@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   config: {
@@ -21,7 +22,8 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, commandName }) {
-    const questions = JSON.parse(fs.readFileSync('hazoura.json'));
+    const questionsPath = path.join(__dirname, '../hazoura.json');
+    const questions = JSON.parse(fs.readFileSync(questionsPath, 'utf8'));
     const randomQuestionObj = questions[Math.floor(Math.random() * questions.length)];
 
     let optionsText = '';
@@ -40,12 +42,12 @@ module.exports = {
     });
   },
 
-  onReply: async ({ message, Reply, event, usersData, api, commandName }) => {
+  onReply: async function ({ message, Reply, event, usersData, api, commandName }) {
     const { author, messageID, correctOption } = Reply;
     const userAnswer = parseInt(event.body.trim(), 10);
 
     if (event.senderID !== author) return;
-    
+
     if (userAnswer === correctOption) {
       global.GoatBot.onReply.delete(messageID);
       message.unsend(event.messageReply.messageID);
