@@ -1,11 +1,10 @@
 const fs = require('fs');
-const path = require('path');
 
 module.exports = {
   config: {
     name: "سؤال_ديني",
     version: "1.0",
-    author: "حسين يعقوبي و يوسف",
+    author: "حسين يعقوبي",
     role: 0,
     countdown: 10,
     reward: Math.floor(Math.random() * (100 - 50 + 1) + 50),
@@ -22,8 +21,7 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, commandName }) {
-    const questionsPath = path.resolve(__dirname, '..', 'hazoura.json');
-    const questions = JSON.parse(fs.readFileSync(questionsPath));
+    const questions = JSON.parse(fs.readFileSync('hazoura.json'));
     const randomQuestionObj = questions[Math.floor(Math.random() * questions.length)];
 
     let optionsText = '';
@@ -31,7 +29,7 @@ module.exports = {
       optionsText += `\n${key}: ${value}`;
     }
 
-    message.reply(`❛ ━━━━━･❪ -٨ ❫ ･━━━━━ ❜\n ⚜️ | ${randomQuestionObj.question} \n${optionsText}\n 🔖 | قم بالرد بالرقم على الإجابة الصحيحة \n❛ ━━━━━･❪ -٨ ❫ ･━━━━━ ❜ 
+    message.reply(`❛ ━━━━━･❪ 🕊️ ❫ ･━━━━━ ❜\n ⚜️ | ${randomQuestionObj.question} \n${optionsText}\n 🔖 | قم بالرد بالرقم على الإجابة الصحيحة \n❛ ━━━━━･❪ 🕊️ ❫ ･━━━━━ ❜ 
     `, (err, info) => {
       global.GoatBot.onReply.set(info.messageID, {
         commandName,
@@ -44,19 +42,18 @@ module.exports = {
 
   onReply: async ({ message, Reply, event, usersData, api, commandName }) => {
     const { author, messageID, correctOption } = Reply;
-    const userAnswer = parseInt(event.body.trim(), 10);
+    const userAnswer = event.body.trim();
 
-    if (event.senderID !== author) return;
-
-    if (userAnswer === correctOption) {
+    if (Object.keys(Reply.options).includes(userAnswer) && userAnswer === correctOption) {
       global.GoatBot.onReply.delete(messageID);
       message.unsend(event.messageReply.messageID);
       const reward = Math.floor(Math.random() * (100 - 50 + 1) + 50);
       await usersData.addMoney(event.senderID, reward);
       const userName = await api.getUserInfo(event.senderID);
-      message.reply(`تهانينا 🎉🎊 يا ${userName[event.senderID].name}، لقد أجبت بشكل صحيح وفزت بمبلغ قدره ${reward} دولار 💵 !`);
+      message.reply(`تهانينا 🎉🎊 يا ، ${userName[event.senderID].name}، لقد أجبت بشكل صحيح وفزت بمبلغ قدره ${reward} دولار 💵 !`);
       api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     } else {
+      message.reply("❌ | آسف، الإجابة غير صحيحة.");
       api.setMessageReaction("❌", event.messageID, (err) => {}, true);
     }
   }
