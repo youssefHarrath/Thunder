@@ -1,5 +1,6 @@
 const axios = require('axios');
 
+// وظيفة للحصول على استجابة الذكاء الاصطناعي
 async function getAIResponse(prompt, userId) {
   try {
     const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(prompt)}&uid=${userId}`);
@@ -10,14 +11,16 @@ async function getAIResponse(prompt, userId) {
   }
 }
 
+// الدالة الأساسية لمعالجة الأوامر
 async function handleAIQuestion({ api, message, event }) {
-  const Prefixes = ['ميدوريا', 'ai'];
-  const prefix = Prefixes.find((p) => event.body && event.body.toLowerCase().startsWith(p));
-  if (!prefix) {
-    return; // Invalid prefix, ignore the command
+  const Prefix = '.ميدو';
+  const body = event.body && event.body.trim();
+  
+  if (!body || !body.startsWith(Prefix)) {
+    return; // بادئة غير صالحة، تجاهل الأمر
   }
 
-  const prompt = event.body.substring(prefix.length).trim();
+  const prompt = body.substring(Prefix.length).trim();
   if (!prompt) {
     await message.reply("📝 | قم بطرح السؤال في الوقت الذي تحتاجه وسأسعى جاهداً للإجابة عنه.");
     return;
@@ -51,9 +54,9 @@ module.exports = {
     countDown: 5,
     role: 0,
     longDescription: "قم بالدردشة مع ميدوريا",
-    category: "الذكاء الإصطناعي",
+    category: "الذكاء الاصطناعي",
     guide: {
-      en: "{p}ميدوريا {سؤال او استفسار}"
+      en: "{p}.ميدو {سؤال او استفسار}"
     }
   },
   handleCommand: handleAIQuestion,
