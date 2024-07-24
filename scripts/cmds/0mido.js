@@ -1,19 +1,5 @@
 const axios = require('axios');
 
-const Prefixes = [
-  'ميدوريا',
-  'ai',
-];
-const prefix = Prefixes.find((p) => event.body && event.body.toLowerCase().startsWith(p));
-if (!prefix) {
-  return; // Invalid prefix, ignore the command
-}
-const prompt = event.body.substring(prefix.length).trim();
-if (!prompt) {
-  await message.reply("📝 | قم بطرح السؤال في الوقت الذي تحتاجه وسأسعى جاهداً للإجابة عنه.");
-  return;
-}
-
 async function getAIResponse(prompt, userId) {
   try {
     const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(prompt)}&uid=${userId}`);
@@ -24,16 +10,22 @@ async function getAIResponse(prompt, userId) {
   }
 }
 
-async function handleAIQuestion({ api, message, event, args }) {
+async function handleAIQuestion({ api, message, event }) {
+  const Prefixes = ['ميدوريا', 'ai'];
+  const prefix = Prefixes.find((p) => event.body && event.body.toLowerCase().startsWith(p));
+  if (!prefix) {
+    return; // Invalid prefix, ignore the command
+  }
+
+  const prompt = event.body.substring(prefix.length).trim();
+  if (!prompt) {
+    await message.reply("📝 | قم بطرح السؤال في الوقت الذي تحتاجه وسأسعى جاهداً للإجابة عنه.");
+    return;
+  }
+
   try {
     const userId = event.senderID;
-    const question = args.join(" ").trim();
-
-    if (!question) {
-      return message.reply(" ⚠️ | أرجوك قم بطرح سؤال.");
-    }
-
-    const answer = await getAIResponse(question, userId);
+    const answer = await getAIResponse(prompt, userId);
     message.reply(answer, (err, info) => {
       if (err) {
         console.error("Error:", err);
@@ -55,7 +47,7 @@ module.exports = {
     name: "ميدو",
     aliases: ["chatgpt"],
     version: "1.0",
-    author: "يوسف",
+    author: "kshitiz",
     countDown: 5,
     role: 0,
     longDescription: "قم بالدردشة مع ميدوريا",
