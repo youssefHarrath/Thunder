@@ -4,7 +4,7 @@ module.exports = {
   config: {
     name: "سؤال_ديني",
     version: "1.0",
-    author: "حسين يعقوبي",
+    author: "يوسف",
     role: 0,
     countdown: 10,
     reward: Math.floor(Math.random() * (100 - 50 + 1) + 50),
@@ -35,22 +35,25 @@ module.exports = {
         commandName,
         messageID: info.messageID,
         author: event.senderID,
-        correctOption: randomQuestionObj.correctOption
+        correctOption: randomQuestionObj.correctOption,
+        options: Object.keys(randomQuestionObj.options)
       });
     });
   },
 
   onReply: async ({ message, Reply, event, usersData, api, commandName }) => {
-    const { author, messageID, correctOption } = Reply;
+    const { author, messageID, correctOption, options } = Reply;
     const userAnswer = event.body.trim();
 
-    if (Object.keys(Reply.options).includes(userAnswer) && userAnswer === correctOption) {
+    if (event.senderID !== author) return;
+
+    if (options.includes(userAnswer) && userAnswer === correctOption) {
       global.GoatBot.onReply.delete(messageID);
       message.unsend(event.messageReply.messageID);
       const reward = Math.floor(Math.random() * (100 - 50 + 1) + 50);
       await usersData.addMoney(event.senderID, reward);
       const userName = await api.getUserInfo(event.senderID);
-      message.reply(`تهانينا 🎉🎊 يا ، ${userName[event.senderID].name}، لقد أجبت بشكل صحيح وفزت بمبلغ قدره ${reward} دولار 💵 !`);
+      message.reply(`تهانينا 🎉🎊 يا ${userName[event.senderID].name}، لقد أجبت بشكل صحيح وفزت بمبلغ قدره ${reward} دولار 💵 !`);
       api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     } else {
       message.reply("❌ | آسف، الإجابة غير صحيحة.");
