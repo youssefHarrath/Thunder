@@ -35,7 +35,7 @@ module.exports = {
       const prompt = event.body.substring(prefix.length).trim();
 
       if (prompt === '') {
-        await message.reply("اسمي ميدوريا يا حيوان 😀\nوهذه هي البادئة الخاصة بي '©'");
+        await message.reply("اسمي ميدوريا يا هذا \nوهذه هي البادئة الخاصة بي '©'");
         return;
       }
 
@@ -52,31 +52,7 @@ module.exports = {
       const moroccoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Casablanca" });
 
       message.reply({
-        body: `إجابة البوت 🤖 : ${answer}\n ⏰ | الوقت الحالي : ${moroccoTime}\n\n`,
+        body: `إجابة البوت  : ${answer}\n ⏰ | الوقت الحالي : ${moroccoTime}\n\n`,
       });
 
       console.log('Sent answer as a reply to user');
-
-      const cacheDir = path.join(__dirname, 'cache');
-      const gttsPath = path.join(cacheDir, 'voice.mp3');
-      const gttsInstance = new gtts(answer, 'ar');
-
-      gttsInstance.save(gttsPath, function (error, result) {
-        if (error) {
-          console.error("Error saving gTTS:", error);
-        } else {
-          api.sendMessage({
-            body: "🗣 الحواب الصوتي :",
-            attachment: fs.createReadStream(gttsPath)
-          }, event.threadID);
-        }
-      });
-    } catch (error) {
-      console.error(`Failed to get answer: ${error.message}`);
-      api.sendMessage(
-        `❌ | ${error.message}.\nيمكنك محاولة كتابة سؤالك مرة أخرى أو إعادة إرساله، حيث قد يكون هناك خطأ من الخادم يسبب المشكلة. قد يحل المشكلة.`,
-        event.threadID
-      );
-    }
-  },
-};
