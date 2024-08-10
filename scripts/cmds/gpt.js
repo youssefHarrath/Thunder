@@ -1,7 +1,4 @@
 const axios = require('axios');
-const gtts = require('gtts');
-const path = require('path');
-const fs = require('fs');
 const moment = require('moment-timezone');
 
 const Prefixes = ['بوت', 'AI', ''];
@@ -47,12 +44,18 @@ module.exports = {
         throw new Error('Invalid or missing response from API');
       }
 
-      const { answer, time } = response.data;
+      const { answer } = response.data;
 
-      const moroccoTime = new Date().toLocaleString("en-US", { timeZone: "Africa/Casablanca" });
+      const moroccoTime = moment().tz("Africa/Casablanca").format("YYYY-MM-DD HH:mm:ss");
 
-      message.reply({
+      await message.reply({
         body: `إجابة البوت  : ${answer}\n ⏰ | الوقت الحالي : ${moroccoTime}\n\n`,
       });
 
       console.log('Sent answer as a reply to user');
+    } catch (error) {
+      console.error("Error:", error.message);
+      await message.reply("حدث خطأ أثناء معالجة الطلب.");
+    }
+  },
+};
