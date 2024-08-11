@@ -50,7 +50,7 @@ module.exports = {
     name: "ميدو",
     aliases: ["chatgpt"],
     version: "1.0",
-    author: "kshitiz",
+    author: "يوسف",
     countDown: 5,
     role: 0,
     longDescription: "قم بالدردشة مع ميدوريا",
