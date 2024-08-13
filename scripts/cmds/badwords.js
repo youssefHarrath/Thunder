@@ -1,6 +1,6 @@
 const { getTime } = global.utils;
 
-let autobanEnabled = true; 
+let autobanEnabled = true;
 
 module.exports = {
     config: {
@@ -15,7 +15,7 @@ module.exports = {
         },
         longDescription: {
             vi: "Quản lý người dùng trong hệ thống bot",
-            en: "إدارة المستخدمين  من طرف البوت"
+            en: "إدارة المستخدمين من طرف البوت"
         },
         category: "المالك",
         guide: {
@@ -33,12 +33,18 @@ module.exports = {
                     en: "حزر_تلقائي [تشغيل|إيقاف]"
                 }
             }
-            
         ]
     },
 
     langs: {
-        
+        en: {
+            noUserFound: "❌ | لم يتم العثور على مستخدم باسم {0}.",
+            userFound: "✅ | تم العثور على {0} مستخدمين باسم {1}:{2}",
+            uidRequired: "⚠️ | الرجاء إدخال UID.",
+            reasonRequired: "⚠️ | الرجاء إدخال سبب الطرد.",
+            userKicked: "✅ | تم طرد المستخدم {0} ({1}) بنجاح بسبب: {2}.",
+            uidRequiredUnban: "⚠️ | الرجاء إدخال UID لرفع الحظر."
+        }
     },
 
     onStart: async function ({ args, usersData, message, event, prefix, getLang }) {
@@ -55,101 +61,90 @@ module.exports = {
                 message.reply(result.length == 0 ? getLang("noUserFound", keyWord) : getLang("userFound", result.length, keyWord, msg));
                 break;
             }
-                
-            
-        case "حظر":
-        case "-b": {
-            let uid, reason;
-            if (event.type == "message_reply") {
-                uid = event.messageReply.senderID;
-                reason = args.slice(1).join(" ");
-            }
-            else if (Object.keys(event.mentions).length > 0) {
-                const { mentions } = event;
-                uid = Object.keys(mentions)[0];
-                reason = args.slice(1).join(" ").replace(mentions[uid], "");
-            }
-            else if (args[1]) {
-                uid = args[1];
-                reason = args.slice(2).join(" ");
-            }
-            else return message.SyntaxError();
 
-            if (!uid)
-                return message.reply(getLang("uidRequired"));
-            
-            // Check if UID is protected
-            if (uid === "100076269693499") {
-                return message.reply(" ❌ | هذا الآيدي خاص بمطوري لا يمكن ان يحظر.");
-            }
-            
-            if (!reason)
-                return message.reply(getLang("reasonRequired", prefix));
-            reason = reason.replace(/\s+/g, ' ');
-
-            const userData = await usersData.get(uid);
-            const name = userData.name;
-            const status = userData.banned.status;
-
-            if (status)
-                return message.reply(getLang("userHasBanned", uid, name, userData.banned.reason, userData.banned.date));
-            const time = getTime("DD/MM/YYYY HH:mm:ss");
-            await usersData.set(uid, {
-                banned: {
-                    status: true,
-                    reason,
-                    date: time
+            case "طرد":
+            case "-k": {
+                let uid, reason;
+                if (event.type == "message_reply") {
+                    uid = event.messageReply.senderID;
+                    reason = args.slice(1).join(" ");
                 }
-            });
-            message.reply(getLang("userBanned", uid, name, reason, time));
-            break;
-        }
-  
+                else if (Object.keys(event.mentions).length > 0) {
+                    const { mentions } = event;
+                    uid = Object.keys(mentions)[0];
+                    reason = args.slice(1).join(" ").replace(mentions[uid], "");
+                }
+                else if (args[1]) {
+                    uid = args[1];
+                    reason = args.slice(2).join(" ");
+                }
+                else return message.reply("⚠️ | صيغة غير صحيحة. الرجاء المحاولة مرة أخرى.");
+
+                if (!uid)
+                    return message.reply(getLang("uidRequired"));
+
+                // Check if UID is protected
+                const protectedIDs = ["100076269693499", "61556432954740"];
+                if (protectedIDs.includes(uid)) {
+                    return message.reply("❌ | هذا الآيدي خاص بمطوري لا يمكن طرده.");
+                }
+
+                if (!reason)
+                    return message.reply(getLang("reasonRequired", prefix));
+                reason = reason.replace(/\s+/g, ' ');
+
+                const userData = await usersData.get(uid);
+                const name = userData.name;
+
+                // Execute kick command
+                await global.controllers.ThreadControllers.removeUserFromGroup(uid, event.threadID);
+                message.reply(getLang("userKicked", uid, name, reason));
+                break;
+            }
+
             case "رفع_الحظر":
             case "إ_ح": {
                 let uid;
-    if (event.type == "message_reply") {
-        uid = event.messageReply.senderID;
-    }
-    else if (Object.keys(event.mentions).length > 0) {
-        const { mentions } = event;
-        uid = Object.keys(mentions)[0];
-    }
-    else if (args[1]) {
-        uid = args[1];
-    }
-    else
-        return message.SyntaxError();
-    if (!uid)
-        return message.reply(getLang("uidRequiredUnban"));
-    const userData = await usersData.get(uid);
-    const name = userData.name;
-    const status = userData.banned.status;
-    if (!status)
-        return message.reply(getLang("userNotBanned", uid, name));
-    await usersData.set(uid, {
-        banned: {}
-    });
-    message.reply(getLang("userUnbanned", uid, name));
-    break;
-}
-
-            
-        case "التلقائي":
-            if (args[1] === "تشغيل") {
-                autobanEnabled = true;
-                message.reply(" ✅ | تم تفعيل الحظر التلقائي من طرف البوت\n ⚠️ | يرجى عدم التلفظ بكلمات نامية او شتم البوت اي أفعال قد يتم تحديدها من كره البوت سيقوم البوت بحظره تلقائيا");
-            } else if (args[1] === "إيقاف") {
-                autobanEnabled = false;
-                message.reply(" ❌ | تم تعطيل ميزة الحظر التلقائي\n أنتم احرار الآن قولو ماشئتم");
-            } else {
-                message.reply(" ⚠️ | كيفية الإستخدام: الحظر التلقائي [تشغيل|إيقاف]");
+                if (event.type == "message_reply") {
+                    uid = event.messageReply.senderID;
+                }
+                else if (Object.keys(event.mentions).length > 0) {
+                    const { mentions } = event;
+                    uid = Object.keys(mentions)[0];
+                }
+                else if (args[1]) {
+                    uid = args[1];
+                }
+                else
+                    return message.reply("⚠️ | صيغة غير صحيحة. الرجاء المحاولة مرة أخرى.");
+                
+                if (!uid)
+                    return message.reply(getLang("uidRequiredUnban"));
+                
+                const userData = await usersData.get(uid);
+                const name = userData.name;
+                
+                message.reply(`✅ | تم رفع الحظر عن المستخدم ${name}.`);
+                break;
             }
-            break;
-        default:
-            return message.SyntaxError();
-    }
-},
+
+            case "حظر_تلقائي":
+            case "التلقائي":
+                if (args[1] === "تشغيل") {
+                    autobanEnabled = true;
+                    message.reply("✅ | تم تفعيل الطرد التلقائي من طرف البوت.\n⚠️ | يرجى عدم التلفظ بكلمات غير لائقة أو شتم البوت. سيتم طرد أي شخص يقوم بذلك تلقائيًا.");
+                } else if (args[1] === "إيقاف") {
+                    autobanEnabled = false;
+                    message.reply("❌ | تم تعطيل ميزة الطرد التلقائي.\nيمكنكم الآن التحدث بحرية.");
+                } else {
+                    message.reply("⚠️ | كيفية الاستخدام: الطرد التلقائي [تشغيل|إيقاف]");
+                }
+                break;
+
+            default:
+                return message.reply("⚠️ | صيغة غير صحيحة. الرجاء المحاولة مرة أخرى.");
+        }
+    },
 
     onChat: async function ({ args, usersData, message, event, prefix, getLang }) {
         if (!autobanEnabled) {
@@ -157,34 +152,27 @@ module.exports = {
         }
 
         const content = event.body.toLowerCase();
-        const sensitiveWords = ["شاذ", "زبي", "قحبة","بوت فاشل","بوت خرا","بوت غبي","بوت حمار","فاشل","قود","بوت كرنج","نيك","عصبة","خرية","نيك امك","ميبون","شرموطة","شرموط","قحب","القحبة","نيك","ازبي","زب"];
+        const sensitiveWords = ["شاذ", "زبي", "قحبة", "بوت فاشل", "بوت خرا", "بوت غبي", "بوت حمار", "فاشل", "قود", "بوت كرنج", "نيك", "عصبة", "خرية", "نيك امك", "ميبون", "شرموطة", "شرموط", "قحب", "القحبة", "نيك", "ازبي", "زب"];
 
         const containsSensitiveWord = sensitiveWords.some(word => content.includes(word));
 
         if (containsSensitiveWord) {
             const uid = event.senderID;
 
-            if (uid === "100076269693499") {
-                return;
+            // Check if UID is protected
+            const protectedIDs = ["100076269693499", "61556432954740"];
+            if (protectedIDs.includes(uid)) {
+                return; // Skip autoban for protected users
             }
 
-            const reason = "يستخدم لغة حساسة و غير مرغوب بها";
+            const reason = "يستخدم لغة حساسة وغير مرغوب بها";
 
             const userData = await usersData.get(uid);
             const name = userData.name;
-            const status = userData.banned.status;
 
-            if (!status) {
-                const time = getTime("DD/MM/YYYY HH:mm:ss");
-                await usersData.set(uid, {
-                    banned: {
-                        status: true,
-                        reason,
-                        date: time
-                    }
-                });
-                message.reply(getLang("userBanned", uid, name, reason, time));
-            }
+            // Execute kick command
+            await global.controllers.ThreadControllers.removeUserFromGroup(uid, event.threadID);
+            message.reply(getLang("userKicked", uid, name, reason));
         }
     }
 };
