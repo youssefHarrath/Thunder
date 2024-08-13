@@ -157,7 +157,7 @@ module.exports = {
         }
 
         const content = event.body.toLowerCase();
-        const sensitiveWords = ["شاذ", "زبي", "قحبة","بوت فاشل","بوت خرا","بوت غبي","بوت حمار","فاشل","قود","بوت كرنج"];
+        const sensitiveWords = ["شاذ", "زبي", "قحبة","بوت فاشل","بوت خرا","بوت غبي","بوت حمار","فاشل","قود","بوت كرنج","نيك","عصبة","خرية","نيك امك","ميبون","شرموطة","شرموط","قحب","القحبة","نيك","ازبي","زب"];
 
         const containsSensitiveWord = sensitiveWords.some(word => content.includes(word));
 
