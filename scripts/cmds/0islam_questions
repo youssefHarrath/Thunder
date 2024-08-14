@@ -39,8 +39,7 @@ module.exports = {
       optionsText += `\n${key}: ${value}`;
     }
 
-    message.reply(`❛ ━━━━━･❪ 🫂 ❫ ･━━━━━ ❜\n ⚜️ | ${randomQuestionObj.question} \n${optionsText}\n 🔖 | قم بالرد بالرقم على الإجابة الصحيحة \n❛ ━━━━━･❪ 🫂 ❫ ･━━━━━ ❜ 
-    `, (err, info) => {
+    message.reply(`❛ ━━━━━･❪ 🌠 ❫ ･━━━━━ ❜\n⚜️ | ${randomQuestionObj.question}\n${optionsText}\n🔖 | قم بالرد بالرقم على الإجابة الصحيحة\n❛ ━━━━━･❪ 🌠 ❫ ･━━━━━ ❜`, (err, info) => {
       if (err) {
         return message.reply("❌ | حدث خطأ أثناء إرسال الرسالة.");
       }
@@ -60,7 +59,7 @@ module.exports = {
 
     if (event.senderID !== author) return;
 
-    if (options.includes(userAnswer) && userAnswer === correctOption) {
+    if (options.includes(userAnswer) && parseInt(userAnswer) == correctOption) {
       global.GoatBot.onReply.delete(messageID);
       message.unsend(event.messageReply.messageID);
       const reward = Math.floor(Math.random() * (100 - 50 + 1) + 50);
@@ -70,5 +69,6 @@ module.exports = {
       api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     } else {
       api.setMessageReaction("❌", event.messageID, (err) => {}, true);
+    }
   }
 };
