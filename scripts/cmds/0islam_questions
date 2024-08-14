@@ -69,8 +69,6 @@ module.exports = {
       message.reply(`تهانينا 🎉🎊 يا ${userName[event.senderID].name}، لقد أجبت بشكل صحيح وفزت بمبلغ قدره ${reward} دولار 💵 !`);
       api.setMessageReaction("✅", event.messageID, (err) => {}, true);
     } else {
-      message.reply("❌ | آسف، الإجابة غير صحيحة.");
       api.setMessageReaction("❌", event.messageID, (err) => {}, true);
-    }
   }
 };
