@@ -29,8 +29,8 @@ async function handleAIQuestion({ api, message, event }) {
   try {
     const userId = event.senderID;
 
-    // إعلام المستخدم بأن الإجابة قيد التحضير
-    await message.reply("⏳ | جارٍ تحضير الإجابة، يرجى الانتظار...");
+    // إضافة ردة فعل بإيموجي 💯 على رسالة المستخدم
+    await api.setMessageReaction("💯", event.messageID, true);
 
     const answer = await getAIResponse(prompt, userId);
     await message.reply(answer, (err, info) => {
