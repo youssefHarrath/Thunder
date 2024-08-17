@@ -6,8 +6,8 @@ async function getAIResponse(prompt, userId) {
     const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(prompt)}&uid=${userId}`);
     return response.data.gpt4;
   } catch (error) {
-    console.error("Error:", error);
-    throw error;
+    console.error("Error fetching AI response:", error.message || error);
+    throw new Error("حدث خطأ أثناء محاولة الحصول على إجابة من الذكاء الاصطناعي. حاول مرة أخرى لاحقًا.");
   }
 }
 
@@ -22,16 +22,20 @@ async function handleAIQuestion({ api, message, event }) {
 
   const prompt = body.substring(Prefix.length).trim();
   if (!prompt) {
-    await message.reply("📝 | قم بطرح السؤال في الوقت الذي تحتاجه وسأسعى جاهداً للإجابة عنه.");
+    await message.reply("📝 | قم بطرح السؤال بعد كتابة البادئة .ميدو وسأجيب عليه فورًا.");
     return;
   }
 
   try {
     const userId = event.senderID;
+
+    // إعلام المستخدم بأن الإجابة قيد التحضير
+    await message.reply("⏳ | جارٍ تحضير الإجابة، يرجى الانتظار...");
+
     const answer = await getAIResponse(prompt, userId);
-    message.reply(answer, (err, info) => {
+    await message.reply(answer, (err, info) => {
       if (err) {
-        console.error("Error:", err);
+        console.error("Error sending message:", err.message || err);
       } else {
         global.GoatBot.onReply.set(info.messageID, {
           commandName: "ميدوريا",
@@ -40,8 +44,8 @@ async function handleAIQuestion({ api, message, event }) {
       }
     });
   } catch (error) {
-    console.error("Error:", error.message);
-    message.reply("An error occurred while processing the request.");
+    console.error("Error in handleAIQuestion:", error.message || error);
+    await message.reply("⚠️ | حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى لاحقًا.");
   }
 }
 
@@ -53,10 +57,10 @@ module.exports = {
     author: "يوسف",
     countDown: 5,
     role: 0,
-    longDescription: "قم بالدردشة مع ميدوريا",
+    longDescription: "قم بالدردشة مع ميدوريا باستخدام الذكاء الاصطناعي.",
     category: "الذكاء الاصطناعي",
     guide: {
-      en: "{p}.ميدو {سؤال او استفسار}"
+      en: "{p}.ميدو {سؤال أو استفسار} - تفاعل مع الذكاء الاصطناعي."
     }
   },
   handleCommand: handleAIQuestion,
