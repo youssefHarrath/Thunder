@@ -3,8 +3,8 @@ const axios = require('axios');
 // وظيفة للحصول على استجابة الذكاء الاصطناعي
 async function getAIResponse(prompt, userId) {
   try {
-    const response = await axios.get(`https://ai-tools.replit.app/gpt?prompt=${encodeURIComponent(prompt)}&uid=${userId}`);
-    return response.data.gpt4;
+    const response = await axios.get(`https://c-v1.onrender.com/api/chatgpt?prompt=${encodeURIComponent(prompt)}`);
+    return response.data.answer; // استخدام "answer" بدلاً من "gpt4"
   } catch (error) {
     console.error("Error fetching AI response:", error.message || error);
     throw new Error("حدث خطأ أثناء محاولة الحصول على إجابة من الذكاء الاصطناعي. حاول مرة أخرى لاحقًا.");
