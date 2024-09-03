@@ -21,7 +21,6 @@ module.exports = {
         invaildNumber: "%1 ليس رقما إنه غير صالح",
         cancelSuccess: "تم رفض %1 من المجموعات!",
         approveSuccess: "تمت الموافقة بنجاح على %1 من المجموعات!",
-
         cantGetGroupsList: "لا يمكن الحصول على قائمة المجموعات!",
         returnListGroups: "»「المجموعات」«❮ العدد الكامل للمجموعات التي البوت فيها هو: %1 من المجموعات ❯\n\n%2",
         returnListClean: "「المجموعات」ليس هناك أي مجموعة في قائمة المجموعات"
@@ -30,23 +29,37 @@ module.exports = {
 
   onReply: async function({ api, event, Reply, getLang, commandName, prefix }) {
     if (String(event.senderID) !== String(Reply.author)) return;
-    const { body, threadID, messageID } = event;
-    var count = 0;
 
-    if (isNaN(body) && body.indexOf("إلغاء") == 0 || body.indexOf("cancel") == 0) {
-        const index = (body.slice(1, body.length)).split(/\s+/);
-        for (const singleIndex of index) {
-            if (isNaN(singleIndex) || singleIndex <= 0 || singleIndex > Reply.groups.length) return api.sendMessage(getLang("invaildNumber", singleIndex), threadID, messageID);
-            api.removeUserFromGroup(api.getCurrentUserID(), Reply.groups[singleIndex - 1].threadID);
-            count += 1;
+    const { body, threadID, messageID } = event;
+    let count = 0;
+    const indexArray = body.split(/\s+/).map(Number);
+
+    if (body.toLowerCase().startsWith("إلغاء") || body.toLowerCase().startsWith("cancel")) {
+        for (const index of indexArray) {
+            if (isNaN(index) || index <= 0 || index > Reply.groups.length) {
+                return api.sendMessage(getLang("invaildNumber", index), threadID, messageID);
+            }
+            try {
+                await api.removeUserFromGroup(api.getCurrentUserID(), Reply.groups[index - 1].threadID);
+                count += 1;
+            } catch (e) {
+                console.error(e);
+                return api.sendMessage("حدث خطأ أثناء محاولة إزالة البوت من المجموعة.", threadID, messageID);
+            }
         }
         return api.sendMessage(getLang("cancelSuccess", count), threadID, messageID);
     } else {
-        const index = body.split(/\s+/);
-        for (const singleIndex of index) {
-            if (isNaN(singleIndex) || singleIndex <= 0 || singleIndex > Reply.groups.length) return api.sendMessage(getLang("invaildNumber", singleIndex), threadID, messageID);
-            api.sendMessage(`╭────༺♡༻────╮\n ✅ | تم توصيل ميدوريا بنجاح 🫂🤍:\n==========💌==========\nأكتب ©أوامر من أجل القائمة\nاستمتع بالذكاء الاصطناعي مع ميدوريا\n==========💌==========\nقم بكتابة "أدخلني" من أجل أن تدخل إلى مجموعة ميدوريا إذا واجهت أي مشاكل 🔖\n╰────༺♡༻────╯`, Reply.groups[singleIndex - 1].threadID);
-            count += 1;
+        for (const index of indexArray) {
+            if (isNaN(index) || index <= 0 || index > Reply.groups.length) {
+                return api.sendMessage(getLang("invaildNumber", index), threadID, messageID);
+            }
+            try {
+                await api.sendMessage(`✅ | تم توصيل البوت بنجاح إلى المجموعة: ${Reply.groups[index - 1].name}`, Reply.groups[index - 1].threadID);
+                count += 1;
+            } catch (e) {
+                console.error(e);
+                return api.sendMessage("حدث خطأ أثناء محاولة إرسال الرسالة إلى المجموعة.", threadID, messageID);
+            }
         }
         return api.sendMessage(getLang("approveSuccess", count), threadID, messageID);
     }
@@ -55,25 +68,31 @@ module.exports = {
   onStart: async function({ api, event, getLang, commandName }) {
     const { threadID, messageID } = event;
 
-    var msg = "", index = 1;
+    let msg = "", index = 1;
 
     try {
         // الحصول على جميع المجموعات التي البوت فيها
-        var groups = await api.getThreadList(100, null, ["GROUP"]) || [];
-    } catch (e) { return api.sendMessage(getLang("cantGetGroupsList"), threadID, messageID) }
+        const groups = await api.getThreadList(100, null, ["GROUP"]) || [];
+        const list = groups.filter(group => group.isSubscribed && group.isGroup);
 
-    const list = groups.filter(group => group.isSubscribed && group.isGroup);
-
-    for (const single of list) msg += `${index++}/ ${single.name}(${single.threadID})\n`;
-
-    if (list.length != 0) return api.sendMessage(getLang("returnListGroups", list.length, msg), threadID, (err, info) => {
-        global.GoatBot.onReply.set(info.messageID, {
-            commandName,
-            messageID: info.messageID,
-            author: event.senderID,
-            groups: list
-        });
-    }, messageID);
-    else return api.sendMessage(getLang("returnListClean"), threadID, messageID);
+        if (list.length > 0) {
+            for (const single of list) {
+                msg += `${index++}/ ${single.name}(${single.threadID})\n`;
+            }
+            return api.sendMessage(getLang("returnListGroups", list.length, msg), threadID, (err, info) => {
+                global.GoatBot.onReply.set(info.messageID, {
+                    commandName,
+                    messageID: info.messageID,
+                    author: event.senderID,
+                    groups: list
+                });
+            }, messageID);
+        } else {
+            return api.sendMessage(getLang("returnListClean"), threadID, messageID);
+        }
+    } catch (e) {
+        console.error(e);
+        return api.sendMessage(getLang("cantGetGroupsList"), threadID, messageID);
+    }
   }
-	  }
+}
