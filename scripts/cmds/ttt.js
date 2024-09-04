@@ -27,7 +27,7 @@ if(!global.game.hasOwnProperty(event.threadID) || global.game[event.threadID].on
   } else {
 if(event.senderID == global.game[event.threadID].player1.id || event.senderID == global.game[event.threadID].player2.id ){
   if(event.senderID == global.game[event.threadID].player1.id){
-    message.reply({body:`يا له من طفل بكاء 🙂. ${global.game[event.threadID].player1.name} لقد ترك اللعبة.\n وبذالك يكون الفائز هو ${global.game[event.threadID].player2.name}.`, mentions: [{
+    message.reply({body:`يا له من طفل بكاء . ${global.game[event.threadID].player1.name} لقد ترك اللعبة.\n وبذالك يكون الفائز هو ${global.game[event.threadID].player2.name}.`, mentions: [{
                         tag: global.game[event.threadID].player1.name,
                         id: global.game[event.threadID].player1.id,
         
@@ -40,7 +40,7 @@ if(event.senderID == global.game[event.threadID].player1.id || event.senderID ==
         
                     })
   } else {
-    message.reply({body:`يا له من  طفل بكاء 🙂. ${global.game[event.threadID].player2.name} لقد ترك اللعبة.\nوبذالك يكون الرابح هو ${global.game[event.threadID].player1.name}.`, mentions: [{
+    message.reply({body:`يا له من  طفل بكاء . ${global.game[event.threadID].player2.name} لقد ترك اللعبة.\nوبذالك يكون الرابح هو ${global.game[event.threadID].player1.name}.`, mentions: [{
                         tag: global.game[event.threadID].player1.name,
                         id: global.game[event.threadID].player1.id,
         
@@ -97,7 +97,7 @@ global.game[event.threadID] = {
   onChat: async function ({ event, message, api, args}){
 
 if(event.type =="message" && event.body.includes("-,-")){
-  message.reply({body:" هي هي هي تبا لك",attachment:await global.utils.getStreamFromURL("https://scontent.xx.fbcdn.net/v/t1.15752-9/316181740_667600474745895_5536856546858630902_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=ae9488&_nc_ohc=bR-GcvE6RHMAX_YE5bu&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQk45VA6QO5_X5vTQJYdXF4nH45UeESYppxrFbZdRlJMw&oe=63A3009D")})
+  message.reply({body:" هي هي هي التمبويخ لك",attachment:await global.utils.getStreamFromURL("https://scontent.xx.fbcdn.net/v/t1.15752-9/316181740_667600474745895_5536856546858630902_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=ae9488&_nc_ohc=bR-GcvE6RHMAX_YE5bu&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&oh=03_AdQk45VA6QO5_X5vTQJYdXF4nH45UeESYppxrFbZdRlJMw&oe=63A3009D")})
 }
 
 
@@ -218,7 +218,7 @@ message.send(global.game[event.threadID].board)
 
    
     if(global.game[event.threadID].turn === global.game[event.threadID].player1.id){
-      setTimeout(function(){message.send({body:`تهانينا 🥳 ${global.game[event.threadID].player1.name} , أنت الفائز في هذه المباراة..`, mentions: [{
+      setTimeout(function(){message.send({body:`تهانينا  ${global.game[event.threadID].player1.name} , أنت الفائز في هذه المباراة..`, mentions: [{
                         tag: global.game[event.threadID].player1.name,
                         id: global.game[event.threadID].player1.id,
         
@@ -226,7 +226,7 @@ message.send(global.game[event.threadID].board)
         
         
                     })
-    }, 1000)} else {setTimeout(function(){message.send({body:`تهانينا 🥳 ${global.game[event.threadID].player2.name} , أنت الفائز في هذه المباراة..`, mentions: [{
+    }, 1000)} else {setTimeout(function(){message.send({body:`تهانينا  ${global.game[event.threadID].player2.name} , أنت الفائز في هذه المباراة..`, mentions: [{
                         tag: global.game[event.threadID].player2.name,
                         id: global.game[event.threadID].player2.id,
         
@@ -258,7 +258,7 @@ message.send(global.game[event.threadID].board)
 } else{message.reply("تم حظر هذا بالفعل")}
 
 } else{message.reply("قم بالرد من 1 -9")}
-} else{message.reply("ليس دورك يا غبي") }
+} else{message.reply("ليس دورك يا اخي") }
 
 
 }
