@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// تحديد مسار ملف mutedGroups.json بناءً على مجلد الكود الحالي
 const mutedGroupsFilePath = path.join(__dirname, 'mutedGroups.json');
 
 function getMutedGroups() {
