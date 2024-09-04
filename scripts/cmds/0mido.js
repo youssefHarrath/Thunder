@@ -64,10 +64,10 @@ module.exports = {
     }
   },
   handleCommand: handleAIQuestion,
-  onStart: function ({ api, message, event, args }) {
-    return handleAIQuestion({ api, message, event, args });
+  onStart: function (context) {
+    return handleAIQuestion(context);
   },
-  onReply: function ({ api, message, event, args }) {
-    return handleAIQuestion({ api, message, event, args });
+  onReply: function (context) {
+    return handleAIQuestion(context);
   }
 };
