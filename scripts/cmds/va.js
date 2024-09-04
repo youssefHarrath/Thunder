@@ -27,7 +27,7 @@ module.exports = {
 
  const att = event.messageReply.attachments[0];
  if (att.type !== "video") {
- api.sendMessage("أرجوك قم بالرد على الفيديو🤒.", event.threadID, event.messageID);
+ api.sendMessage("أرجوك قم بالرد على الفيديو.", event.threadID, event.messageID);
  return;
  }
 
