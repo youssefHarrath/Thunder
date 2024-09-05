@@ -14,8 +14,14 @@ module.exports = {
     }
   },
 
-  onJoin: async function({ api, event, getLang }) {
-    const { threadID } = event;
-    api.sendMessage(getLang("welcomeMessage"), threadID);
+  // دالة للترحيب في أي مجموعة يتم إضافته إليها
+  onEvent: async function({ api, event, getLang }) {
+    const { threadID, isGroup, logMessageType } = event;
+
+    // تحقق إذا كان هذا الحدث يشير إلى إضافة البوت إلى مجموعة
+    if (logMessageType === "log:subscribe" && isGroup) {
+      // إرسال رسالة الترحيب في المجموعة
+      api.sendMessage(getLang("welcomeMessage"), threadID);
+    }
   }
 };
