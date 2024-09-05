@@ -68,8 +68,10 @@ module.exports = {
         } else {
           // إضافة المجموعة إلى قائمة الكتم
           const mutedGroups = getMutedGroups();
-          mutedGroups.push(selectedGroup.threadID);
-          saveMutedGroups(mutedGroups);
+          if (!mutedGroups.includes(selectedGroup.threadID)) {
+            mutedGroups.push(selectedGroup.threadID);
+            saveMutedGroups(mutedGroups);
+          }
           api.sendMessage(getLang("leaveSuccess", 1), threadID);
         }
       });
