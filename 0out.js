@@ -3,6 +3,7 @@ const path = require('path');
 
 const mutedGroupsFilePath = path.join(__dirname, 'mutedGroups.json');
 
+// دالة لجلب قائمة المجموعات المكتومة
 function getMutedGroups() {
   if (fs.existsSync(mutedGroupsFilePath)) {
     return JSON.parse(fs.readFileSync(mutedGroupsFilePath, 'utf8'));
@@ -10,6 +11,7 @@ function getMutedGroups() {
   return [];
 }
 
+// دالة لحفظ قائمة المجموعات المكتومة
 function saveMutedGroups(groups) {
   fs.writeFileSync(mutedGroupsFilePath, JSON.stringify(groups, null, 2), 'utf8');
 }
@@ -18,7 +20,7 @@ module.exports = {
   config: {
     name: "خروج",
     version: "1.1",
-    author: "لوفي",
+    author: "يوسف",
     shortDescription: "يجعل البوت يغادر مجموعة محددة ويمنعه من التحدث فيها حتى يتم إعادة تفعيله",
     longDescription: "استخدم هذا الأمر لجعل البوت يغادر مجموعة محددة. البوت سيبقى صامتًا في المجموعة حتى يتم إعادة تفعيله باستخدام أمر معين.",
     category: "المالك",
@@ -42,14 +44,19 @@ module.exports = {
     const { body, threadID, messageID } = event;
     const groupNumber = parseInt(body.trim());
 
+    // فحص إذا كان الرقم صالحًا
     if (isNaN(groupNumber) || groupNumber <= 0 || groupNumber > Reply.groups.length) {
       return api.sendMessage(getLang("invalidNumber", groupNumber), threadID, messageID);
     }
 
     const selectedGroup = Reply.groups[groupNumber - 1];
+    
+    // مغادرة المجموعة وإضافةها لقائمة المجموعات المكتومة
     api.sendMessage("وداعًا! سأغادر هذه المجموعة الآن.", selectedGroup.threadID, () => {
       api.removeUserFromGroup(api.getCurrentUserID(), selectedGroup.threadID, async (err) => {
         if (err) {
+          // إذا حدث خطأ، إخطار المستخدم
+          api.sendMessage("حدث خطأ أثناء محاولة مغادرة المجموعة. حاول مرة أخرى.", threadID);
           console.error("حدث خطأ أثناء محاولة مغادرة المجموعة:", err);
         } else {
           // إضافة المجموعة إلى قائمة الكتم
@@ -65,26 +72,38 @@ module.exports = {
   onCommand: async function({ api, event, getLang }) {
     const { body, threadID, senderID } = event;
 
-    // تحقق أن المستخدم هو صاحب المعرف المحدد فقط
+    // فحص أن المستخدم هو المالك المحدد
     if (String(senderID) !== "61556432954740") {
       return api.sendMessage("عذرًا، لا يمكنك استخدام هذا الأمر.", threadID);
     }
 
     const command = body.trim().split(' ');
-    
-    if (command[0] === '.خروج' && command.length === 2 && command[1] === 'off') {
-      // إعادة تفعيل البوت في المجموعة
-      const mutedGroups = getMutedGroups();
-      const groupID = threadID;
 
-      if (mutedGroups.includes(groupID)) {
-        const index = mutedGroups.indexOf(groupID);
-        mutedGroups.splice(index, 1);
-        saveMutedGroups(mutedGroups);
-        api.sendMessage(getLang("groupActivated"), threadID);
+    // فحص إذا كان الأمر مكتوبًا بالشكل الصحيح
+    if (command[0] === '.خروج' && command.length === 2) {
+      const action = command[1].toLowerCase();
+
+      // إعادة تفعيل البوت في المجموعة إذا كانت مكتومة
+      if (action === 'off') {
+        const mutedGroups = getMutedGroups();
+        const groupID = threadID;
+
+        if (mutedGroups.includes(groupID)) {
+          // إزالة المجموعة من قائمة الكتم
+          const index = mutedGroups.indexOf(groupID);
+          mutedGroups.splice(index, 1);
+          saveMutedGroups(mutedGroups);
+          api.sendMessage(getLang("groupActivated"), threadID);
+        } else {
+          // إخطار المستخدم بأن البوت ليس مكتومًا
+          api.sendMessage(getLang("invalidCommand"), threadID);
+        }
       } else {
-        api.sendMessage(getLang("invalidCommand"), threadID);
+        // إذا كان هناك خطأ في كتابة الأمر
+        api.sendMessage("يرجى استخدام الأمر بالشكل الصحيح: .خروج off", threadID);
       }
+    } else {
+      api.sendMessage("يرجى استخدام الأمر بالشكل الصحيح: .خروج off", threadID);
     }
   },
 
@@ -92,12 +111,12 @@ module.exports = {
     const { threadID } = event;
     const mutedGroups = getMutedGroups();
 
-    // تحقق إذا كان البوت في مجموعة مكتمة
+    // فحص إذا كان البوت مكتومًا في المجموعة
     if (mutedGroups.includes(threadID)) {
-      // إذا كانت المجموعة مكتمة، توقف عن إرسال الرسائل
+      // إذا كانت المجموعة مكتمة، لا يرسل البوت أي رسائل
       return;
     }
 
-    // هنا يمكن إضافة الكود الذي يعالج الرسائل التي يرسلها البوت
+    // هنا يمكنك إضافة الكود الذي يعالج الرسائل التي يرسلها البوت في المجموعات غير المكتومة
   }
 };
