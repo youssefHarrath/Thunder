@@ -68,10 +68,8 @@ module.exports = {
         } else {
           // إضافة المجموعة إلى قائمة الكتم
           const mutedGroups = getMutedGroups();
-          if (!mutedGroups.includes(selectedGroup.threadID)) {
-            mutedGroups.push(selectedGroup.threadID);
-            saveMutedGroups(mutedGroups);
-          }
+          mutedGroups.push(selectedGroup.threadID);
+          saveMutedGroups(mutedGroups);
           api.sendMessage(getLang("leaveSuccess", 1), threadID);
         }
       });
@@ -126,5 +124,25 @@ module.exports = {
     }
 
     // هنا يمكنك إضافة الكود الذي يعالج الرسائل التي يرسلها البوت في المجموعات غير المكتومة
+  },
+
+  // إضافة دالة لإلغاء كتم مجموعة معينة
+  onCommand: async function({ api, event, getLang }) {
+    const { body, threadID } = event;
+
+    // التحقق من الأمر وإزالة كتم المجموعة
+    if (body.endsWith(" off")) {
+      const groupName = body.slice(0, -4).trim().replace(/^".*?"$/, '');
+      const mutedGroups = getMutedGroups();
+      const groupIndex = mutedGroups.indexOf(groupName);
+      
+      if (groupIndex > -1) {
+        mutedGroups.splice(groupIndex, 1);
+        saveMutedGroups(mutedGroups);
+        return api.sendMessage(getLang("groupActivated"), threadID);
+      } else {
+        return api.sendMessage(getLang("invalidCommand"), threadID);
+      }
+    }
   }
 };
