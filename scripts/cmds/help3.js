@@ -61,7 +61,7 @@ module.exports = {
 			const totalCommands = commands.size;
 			msg += `\nحاليا البوت لديه ${totalCommands} أمر يمكن إستخدامه\n`;
 			msg += `أكتب ${prefix} أوامر من أجل أن ترى كيفية إستخدام ذالك الأمر\n`;
-			msg += `🧿 | THUNDER`;
+			msg += ` | THUNDER`;
 
 
 			const helpListImages = [
