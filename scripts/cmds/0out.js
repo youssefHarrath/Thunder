@@ -35,7 +35,7 @@ module.exports = {
       returnListClean: "البوت ليس في أي مجموعة.",
       groupMuted: "تم كتم البوت في هذه المجموعة.",
       groupActivated: "تم تفعيل البوت في هذه المجموعة.",
-      invalidCommand: "الأمر غير صحيح. استخدم `.خروج \"المجموعة الفلانية\" off` لإعادة تفعيل البوت في مجموعة."
+      invalidCommand: "الأمر غير صحيح. استخدم `.خروج off` لإعادة تفعيل البوت في مجموعة."
     }
   },
 
@@ -69,7 +69,7 @@ module.exports = {
     });
   },
 
-  onCommand: async function({ api, event, getLang }) {
+  onStart: async function({ api, event, getLang }) {
     const { body, threadID, senderID } = event;
 
     // فحص أن المستخدم هو المالك المحدد
