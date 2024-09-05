@@ -34,6 +34,6 @@ module.exports = {
      if (options.length < 2) return message.reply(getLang("many")); 
   
      const index = options[Math.floor(Math.random()*options.length)]; 
-     message.reply(`⇒ ${options[index]?.trim() || "┐(￣ヘ￣)┌"}`); 
+     message.reply(`⇒ ${options[index]?.trim() || "┐( ヘ￣)┌"}`); 
    }
 }
