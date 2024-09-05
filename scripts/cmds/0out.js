@@ -16,6 +16,18 @@ function saveMutedGroups(groups) {
   fs.writeFileSync(mutedGroupsFilePath, JSON.stringify(groups, null, 2), 'utf8');
 }
 
+// دالة لعرض المجموعات التي يوجد فيها البوت
+async function getGroupsList(api) {
+  return new Promise((resolve, reject) => {
+    api.getThreadList(100, null, ['INBOX'], (err, threads) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(threads);
+    });
+  });
+}
+
 module.exports = {
   config: {
     name: "خروج",
@@ -35,7 +47,7 @@ module.exports = {
       returnListClean: "البوت ليس في أي مجموعة.",
       groupMuted: "تم كتم البوت في هذه المجموعة.",
       groupActivated: "تم تفعيل البوت في هذه المجموعة.",
-      invalidCommand: "الأمر غير صحيح. استخدم `.خروج off` لإعادة تفعيل البوت في مجموعة."
+      invalidCommand: "الأمر غير صحيح. استخدم `.خروج \"المجموعة الفلانية\" off` لإعادة تفعيل البوت في مجموعة."
     }
   },
 
@@ -44,19 +56,14 @@ module.exports = {
     const { body, threadID, messageID } = event;
     const groupNumber = parseInt(body.trim());
 
-    // فحص إذا كان الرقم صالحًا
     if (isNaN(groupNumber) || groupNumber <= 0 || groupNumber > Reply.groups.length) {
       return api.sendMessage(getLang("invalidNumber", groupNumber), threadID, messageID);
     }
 
     const selectedGroup = Reply.groups[groupNumber - 1];
-    
-    // مغادرة المجموعة وإضافةها لقائمة المجموعات المكتومة
     api.sendMessage("وداعًا! سأغادر هذه المجموعة الآن.", selectedGroup.threadID, () => {
-      api.removeUserFromGroup(api.getCurrentUserID(), selectedGroup.threadID, async (err) => {
+      api.removeUserFromGroup(api.getCurrentUserID(), selectedGroup.threadID, (err) => {
         if (err) {
-          // إذا حدث خطأ، إخطار المستخدم
-          api.sendMessage("حدث خطأ أثناء محاولة مغادرة المجموعة. حاول مرة أخرى.", threadID);
           console.error("حدث خطأ أثناء محاولة مغادرة المجموعة:", err);
         } else {
           // إضافة المجموعة إلى قائمة الكتم
@@ -69,41 +76,40 @@ module.exports = {
     });
   },
 
-  onStart: async function({ api, event, getLang }) {
-    const { body, threadID, senderID } = event;
+  onStart: async function({ api, event, getLang, commandName }) {
+    const { threadID, messageID, senderID } = event;
 
-    // فحص أن المستخدم هو المالك المحدد
+    // تحقق أن المستخدم هو صاحب المعرف المحدد فقط
     if (String(senderID) !== "61556432954740") {
       return api.sendMessage("عذرًا، لا يمكنك استخدام هذا الأمر.", threadID);
     }
 
-    const command = body.trim().split(' ');
+    var msg = "", index = 1;
 
-    // فحص إذا كان الأمر مكتوبًا بالشكل الصحيح
-    if (command[0] === '.خروج' && command.length === 2) {
-      const action = command[1].toLowerCase();
+    try {
+      // الحصول على جميع المجموعات التي البوت فيها
+      const groups = await getGroupsList(api);
+      const filteredGroups = groups.filter(group => group.isSubscribed && group.isGroup);
 
-      // إعادة تفعيل البوت في المجموعة إذا كانت مكتومة
-      if (action === 'off') {
-        const mutedGroups = getMutedGroups();
-        const groupID = threadID;
-
-        if (mutedGroups.includes(groupID)) {
-          // إزالة المجموعة من قائمة الكتم
-          const index = mutedGroups.indexOf(groupID);
-          mutedGroups.splice(index, 1);
-          saveMutedGroups(mutedGroups);
-          api.sendMessage(getLang("groupActivated"), threadID);
-        } else {
-          // إخطار المستخدم بأن البوت ليس مكتومًا
-          api.sendMessage(getLang("invalidCommand"), threadID);
-        }
-      } else {
-        // إذا كان هناك خطأ في كتابة الأمر
-        api.sendMessage("يرجى استخدام الأمر بالشكل الصحيح: .خروج off", threadID);
+      if (filteredGroups.length === 0) {
+        return api.sendMessage(getLang("returnListClean"), threadID, messageID);
       }
-    } else {
-      api.sendMessage("يرجى استخدام الأمر بالشكل الصحيح: .خروج off", threadID);
+
+      for (const group of filteredGroups) {
+        msg += `${index++}. ${group.name} (${group.threadID})\n`;
+      }
+
+      api.sendMessage(getLang("returnListGroups", filteredGroups.length, msg), threadID, (err, info) => {
+        global.GoatBot.onReply.set(info.messageID, {
+          commandName,
+          messageID: info.messageID,
+          author: event.senderID,
+          groups: filteredGroups
+        });
+      }, messageID);
+
+    } catch (e) {
+      return api.sendMessage(getLang("cantGetGroupsList"), threadID, messageID);
     }
   },
 
