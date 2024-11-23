@@ -45,7 +45,7 @@
     "whiteListIds": [],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
-  "nickNameBot": "𝚃𝙷𝙺𝙽𝙳𝙴𝚁 ⚡",
+  "nickNameBot": " Thunder ⚡ ",
   "prefix": ".",
   "database": {
     "type": "sqlite",
