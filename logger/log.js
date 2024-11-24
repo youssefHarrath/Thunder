@@ -1,6 +1,7 @@
 const { colors } = require('../func/colors.js');
 const moment = require("moment-timezone");
-const characters = '';
+const characters = ''; // يمكن إعطاء قيمة أو حذفها إذا لم تكن هناك حاجة لها
+
 const getCurrentTime = () => colors.gray(moment().tz("Asia/Ho_Chi_Minh").format("HH:mm:ss DD/MM/YYYY"));
 
 function logError(prefix, message) {
@@ -37,7 +38,7 @@ module.exports = {
 	success: function (prefix, message) {
 		if (message === undefined) {
 			message = prefix;
-			prefix = "SUCCES";
+			prefix = "SUCCESS"; // تم التصحيح هنا
 		}
 		console.log(`${getCurrentTime()} ${colors.cyanBright(`${characters} ${prefix}:`)}`, message);
 	},
@@ -49,15 +50,17 @@ module.exports = {
 		console.log(`${getCurrentTime()} ${colors.hex("#eb6734", `${characters} ${prefix}:`)}`, message);
 	},
 	dev: (...args) => {
-		if (["development", "production"].includes(process.env.NODE_ENV) == false)
+		if (!["development", "production"].includes(process.env.NODE_ENV)) {
 			return;
+		}
 		try {
 			throw new Error();
-		}
-		catch (err) {
+		} catch (err) {
 			const at = err.stack.split('\n')[2];
 			let position = at.slice(at.indexOf(process.cwd()) + process.cwd().length + 1);
-			position.endsWith(')') ? position = position.slice(0, -1) : null;
+			if (position.endsWith(')')) {
+				position = position.slice(0, -1);
+			}
 			console.log(`\x1b[36m${position} =>\x1b[0m`, ...args);
 		}
 	}
